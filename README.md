@@ -1,6 +1,8 @@
 # CameraManager
 ● manage camera session 
+
 ● get image from camera 
+
 ● cropp image from a rect given to the class
 
 **Screenshots :** 

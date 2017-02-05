@@ -8,6 +8,7 @@
 **Screenshots :** 
 
 **How to use :**
+
 1 - Create a variable of class Camera Manager :
 
 `  var cameraManager = CameraManager() `

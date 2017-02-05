@@ -29,5 +29,5 @@ s.framework = "UIKit"
 s.source_files = "CustomCameraManagerClass/**/*.{swift}"
 
 # 9
-s.resources = "CustomCameraManagerClass/**/*.{png,jpeg,jpg,storyboard,xib}"
+s.resources = "CameraManager/CustomCameraManagerClass/**/*.{png,jpeg,jpg,storyboard,xib}"
 end

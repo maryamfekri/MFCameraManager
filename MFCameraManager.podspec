@@ -17,10 +17,10 @@ s.license = { :type => "MIT", :file => "LICENSE" }
 s.author = { "Maryam Fekri" => "maryamfekri.00@gmail.com" }
 
 # 5 - Replace this URL with your own Github page's URL (from the address bar)
-s.homepage = "https://github.com/maryamfekri/CameraManager"
+s.homepage = "https://github.com/maryamfekri/MFCameraManager"
 
 # 6 - Replace this URL with your own Git URL from "Quick Setup"
-s.source = { :git => "https://github.com/maryamfekri/CameraManager.git", :tag => "#{s.version}"}
+s.source = { :git => "https://github.com/maryamfekri/MFCameraManager.git", :tag => "#{s.version}"}
 
 # 7
 s.framework = "UIKit"

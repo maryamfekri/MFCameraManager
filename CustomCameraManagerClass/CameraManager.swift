@@ -183,8 +183,11 @@ class CameraManager {
                                     scale:1,
                                     orientation: imageOrientation! )
                         
+
                         
-                        //save the original and cropped image in gallery
+                        
+                        
+//save the original and cropped image in gallery
 //                        UIImageWriteToSavedPhotosAlbum(capturedImage, nil, nil, nil)
 //                        if croppedImage != nil {
 //                            UIImageWriteToSavedPhotosAlbum(croppedImage!, nil, nil, nil)

@@ -12,13 +12,12 @@ import AVFoundation
 class CameraViewController: UIViewController {
     
     @IBOutlet weak var cameraView: UIView!
-
+    
     var cameraManager = CameraManager()
     var cameraPosition : CameraDevice?
-
+    
     let maskLayer = CALayer()
     let rectLayer = CAShapeLayer()
-    let outlineLayer = CAShapeLayer()
     var rectPath = UIBezierPath()
     let useFrontTextLayer = CATextLayer()
     let tapHereToCaptureTextLayer = CATextLayer()
@@ -30,7 +29,7 @@ class CameraViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         cameraManager.startRunning()
     }
     
@@ -45,7 +44,7 @@ class CameraViewController: UIViewController {
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-
+        
         cameraManager.transitionCamera()
     }
     
@@ -94,7 +93,7 @@ class CameraViewController: UIViewController {
         
         //create a rect shape layer
         rectLayer.frame = CGRect(x: originX, y: originY, width: frameWidth, height: frameHeight)
-    
+        
         //create a beizier path for a rounded rectangle
         rectPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: frameWidth, height: frameHeight), cornerRadius: 10)
         
@@ -102,24 +101,6 @@ class CameraViewController: UIViewController {
         rectLayer.path = rectPath.cgPath
         rectLayer.fillColor = UIColor.black.cgColor
         rectLayer.strokeColor = UIColor.white.cgColor
-        
-        //add the outline layer
-        outlineLayer.addSublayer(rectLayer)
-        outlineLayer.frame = CGRect(x: originX, y: originY, width: frameWidth, height: frameHeight)
-        outlineLayer.path = rectPath.cgPath
-        outlineLayer.strokeColor = UIColor.white.cgColor
-        outlineLayer.fillColor = UIColor.clear.cgColor
-        outlineLayer.backgroundColor = UIColor.clear.cgColor
-        outlineLayer.lineWidth = 2
-        cameraView.layer.addSublayer(outlineLayer)
-        
-        useFrontTextLayer.fontSize = 13
-        useFrontTextLayer.foregroundColor = UIColor.white.cgColor
-        useFrontTextLayer.alignmentMode = kCAAlignmentCenter
-        useFrontTextLayer.frame = CGRect(origin: outlineLayer.frame.origin, size: CGSize(width: 100, height: 30))
-        useFrontTextLayer.position = CGPoint(x: (frameWidth/2), y: 24)
-        useFrontTextLayer.contentsScale = UIScreen.main.scale
-        outlineLayer.addSublayer(useFrontTextLayer)
         
         //add shapelayer to layer
         maskLayer.frame = cameraView.bounds
@@ -140,7 +121,6 @@ class CameraViewController: UIViewController {
     //MARK: - Actions
     @IBAction func useFlashButtonTouchedUpInside(_ sender: UIButton) {
         captureAndCropp()
-//        cameraManager.enableTorchMode(with: 1)
     }
     
     @IBAction func tapGestureAction(_ sender: Any) {
@@ -148,7 +128,7 @@ class CameraViewController: UIViewController {
     }
     
     func captureAndCropp() {
-        self.cameraManager.getcroppedImage(with: self.outlineLayer.frame) {
+        self.cameraManager.getcroppedImage(with: self.rectLayer.frame) {
             (croppedImage, error) -> Void in
             OperationQueue.main.addOperation({
                 if croppedImage != nil {
@@ -165,7 +145,7 @@ extension CameraViewController {
         
         self.cameraPosition = .back
         cameraManager.captureSetup(in: self.cameraView, with: .back)
-
+        
     }
 }
 

@@ -87,7 +87,7 @@ class CameraManager {
         
     }
     
-    func enableTorchMode(with level: Float) {
+    func enableTorchMode(level: Float? = 1) {
         for testedDevice in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo){
             if ((testedDevice as AnyObject).position == AVCaptureDevicePosition.back && self.cameraPosition == .back) {
                 let currentDevice = testedDevice as! AVCaptureDevice
@@ -97,7 +97,7 @@ class CameraManager {
                         if currentDevice.isTorchActive {
                             currentDevice.torchMode = AVCaptureTorchMode.off
                         } else {
-                            try currentDevice.setTorchModeOnWithLevel(level)
+                            try currentDevice.setTorchModeOnWithLevel(level!)
                         }
                         currentDevice.unlockForConfiguration()
                     } catch {
@@ -108,7 +108,7 @@ class CameraManager {
         }
     }
     
-    func getcroppedImage(with rect: CGRect, completionHandler: @escaping (UIImage?, Error?) -> Void){
+    func getcroppedImage(with rect: CGRect? = nil, completionHandler: @escaping (UIImage?, Error?) -> Void){
         
         var croppedImage : UIImage?
         if let videoConnection = videoDataOutput?.connection(withMediaType: AVMediaTypeVideo) {
@@ -122,7 +122,7 @@ class CameraManager {
                     let capturedImage : UIImage = UIImage(data: imageData!)!
                     
                     let originalSize : CGSize
-                    let visibleLayerFrame = rect // THE ACTUAL VISIBLE AREA IN THE LAYER FRAME
+                    let visibleLayerFrame = rect ?? self.cameraView?.frame ?? CGRect.zero // THE ACTUAL VISIBLE AREA IN THE LAYER FRAME
                     
                     // Calculate the fractional size that is shown in the preview
                     if let metaRect : CGRect = (self.previewLayer?.metadataOutputRectOfInterest(for: visibleLayerFrame)) {
@@ -182,12 +182,13 @@ class CameraManager {
                             UIImage(cgImage: capturedImage.cgImage!.cropping(to: cropRect)!,
                                     scale:1,
                                     orientation: imageOrientation! )
-   
-//save the original and cropped image in gallery
-//                        UIImageWriteToSavedPhotosAlbum(capturedImage, nil, nil, nil)
-//                        if croppedImage != nil {
-//                            UIImageWriteToSavedPhotosAlbum(croppedImage!, nil, nil, nil)
-//                        }
+                        
+                        
+                        //save the original and cropped image in gallery
+                        //                        UIImageWriteToSavedPhotosAlbum(capturedImage, nil, nil, nil)
+                        //                        if croppedImage != nil {
+                        //                            UIImageWriteToSavedPhotosAlbum(croppedImage!, nil, nil, nil)
+                        //                        }
                     }
                 }
                 completionHandler(croppedImage, error)

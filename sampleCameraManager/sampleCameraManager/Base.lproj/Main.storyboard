@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bMu-my-uCG">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Scan document-->
+        <scene sceneID="75G-fW-b9B">
+            <objects>
+                <viewController title="Scan document" id="cLk-Ga-SrV" customClass="CameraViewController" customModule="sampleCameraManager" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Qa0-7P-B5K"/>
+                        <viewControllerLayoutGuide type="bottom" id="Z7j-CN-VQd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xEC-Xn-CYt">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Mu-nw-bqb">
+                                <rect key="frame" x="0.0" y="64" width="375" height="523"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="htS-dH-Amj" appends="YES" id="ma7-3l-fWw"/>
+                                </connections>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="har-hR-m9y">
+                                <rect key="frame" x="0.0" y="587" width="375" height="80"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vAd-OE-3nN">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="VqM-Bz-aEQ"/>
+                                        </constraints>
+                                        <state key="normal" title="capture">
+                                            <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="0.5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="useFlashButtonTouchedUpInside:" destination="cLk-Ga-SrV" eventType="touchUpInside" id="CBY-hD-rzQ"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="vAd-OE-3nN" firstAttribute="top" secondItem="har-hR-m9y" secondAttribute="top" id="Lto-20-ccg"/>
+                                    <constraint firstAttribute="height" constant="80" id="Mjt-nF-6bm">
+                                        <variation key="heightClass=compact-widthClass=compact" constant="40"/>
+                                        <variation key="heightClass=compact-widthClass=regular" constant="40"/>
+                                        <variation key="heightClass=regular-widthClass=regular" constant="40"/>
+                                    </constraint>
+                                    <constraint firstAttribute="trailing" secondItem="vAd-OE-3nN" secondAttribute="trailing" id="Pof-nJ-HAs"/>
+                                    <constraint firstItem="vAd-OE-3nN" firstAttribute="leading" secondItem="har-hR-m9y" secondAttribute="leading" id="hKW-WY-HRZ"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="har-hR-m9y" secondAttribute="trailing" id="5qb-Qq-0ua"/>
+                            <constraint firstItem="har-hR-m9y" firstAttribute="top" secondItem="3Mu-nw-bqb" secondAttribute="bottom" id="9sU-Xp-bBf"/>
+                            <constraint firstItem="Z7j-CN-VQd" firstAttribute="top" secondItem="har-hR-m9y" secondAttribute="bottom" id="J0d-qB-1UD"/>
+                            <constraint firstItem="3Mu-nw-bqb" firstAttribute="top" secondItem="Qa0-7P-B5K" secondAttribute="bottom" id="ZJ2-XO-DUD"/>
+                            <constraint firstAttribute="trailing" secondItem="3Mu-nw-bqb" secondAttribute="trailing" id="kTG-pE-huE"/>
+                            <constraint firstItem="har-hR-m9y" firstAttribute="leading" secondItem="xEC-Xn-CYt" secondAttribute="leading" id="reb-GA-RcV"/>
+                            <constraint firstItem="3Mu-nw-bqb" firstAttribute="leading" secondItem="xEC-Xn-CYt" secondAttribute="leading" id="ycu-GC-Ujo"/>
+                            <constraint firstItem="3Mu-nw-bqb" firstAttribute="centerX" secondItem="xEC-Xn-CYt" secondAttribute="centerX" id="z7a-E1-dbU"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Camera" id="XOH-kl-vcR"/>
+                    <connections>
+                        <outlet property="cameraView" destination="3Mu-nw-bqb" id="ikn-ap-3kS"/>
+                        <segue destination="vZM-hW-vGd" kind="show" identifier="CameraView2ImageView" id="DqN-q1-saR"/>
+                    </connections>
+                </viewController>
+                <tapGestureRecognizer id="htS-dH-Amj">
+                    <connections>
+                        <action selector="tapGestureAction:" destination="cLk-Ga-SrV" id="clO-LD-Ahd"/>
+                        <outlet property="delegate" destination="cLk-Ga-SrV" id="aXH-KN-S32"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XLj-wL-5Ff" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3444" y="-2403.1484257871066"/>
+        </scene>
+        <!--Image View-->
+        <scene sceneID="fyB-Kh-yyK">
+            <objects>
+                <viewController storyboardIdentifier="showImage" title="Image View" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vZM-hW-vGd" customClass="ImageViewController" customModule="sampleCameraManager" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="rEu-pu-4sR"/>
+                        <viewControllerLayoutGuide type="bottom" id="ta5-6l-mCP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="K0X-Bj-C75">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cl8-hN-Y70">
+                                <rect key="frame" x="38" y="138" width="300" height="191"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="cl8-hN-Y70" firstAttribute="width" secondItem="K0X-Bj-C75" secondAttribute="width" multiplier="1:2.25" id="1d7-QE-88p"/>
+                            <constraint firstItem="cl8-hN-Y70" firstAttribute="leading" secondItem="K0X-Bj-C75" secondAttribute="leadingMargin" constant="13" id="4fE-8L-FDa"/>
+                            <constraint firstItem="cl8-hN-Y70" firstAttribute="height" secondItem="K0X-Bj-C75" secondAttribute="height" multiplier="1:2" id="BD6-2t-AZm"/>
+                            <constraint firstItem="cl8-hN-Y70" firstAttribute="centerY" secondItem="K0X-Bj-C75" secondAttribute="centerY" id="CK0-id-yjb"/>
+                            <constraint firstItem="cl8-hN-Y70" firstAttribute="width" secondItem="K0X-Bj-C75" secondAttribute="width" multiplier="1:1.25" id="FYc-w2-ZR6"/>
+                            <constraint firstItem="cl8-hN-Y70" firstAttribute="centerY" secondItem="K0X-Bj-C75" secondAttribute="centerY" constant="-100" id="FhV-tb-JEt"/>
+                            <constraint firstItem="cl8-hN-Y70" firstAttribute="height" secondItem="K0X-Bj-C75" secondAttribute="height" multiplier="1:3.5" id="UOH-N0-LO6"/>
+                            <constraint firstItem="cl8-hN-Y70" firstAttribute="centerX" secondItem="K0X-Bj-C75" secondAttribute="centerX" id="W1h-8T-puR"/>
+                        </constraints>
+                        <variation key="heightClass=compact-widthClass=compact">
+                            <mask key="constraints">
+                                <exclude reference="FhV-tb-JEt"/>
+                                <exclude reference="W1h-8T-puR"/>
+                                <exclude reference="FYc-w2-ZR6"/>
+                                <exclude reference="UOH-N0-LO6"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=regular">
+                            <mask key="constraints">
+                                <exclude reference="FhV-tb-JEt"/>
+                                <exclude reference="W1h-8T-puR"/>
+                                <exclude reference="FYc-w2-ZR6"/>
+                                <exclude reference="UOH-N0-LO6"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="constraints">
+                                <exclude reference="CK0-id-yjb"/>
+                                <exclude reference="BD6-2t-AZm"/>
+                                <exclude reference="4fE-8L-FDa"/>
+                                <exclude reference="1d7-QE-88p"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="caprturesImageView" destination="cl8-hN-Y70" id="OBL-rJ-uxR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CoU-4R-rfC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2423.1999999999998" y="-2403.1484257871066"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="XXp-g1-ZnX">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bMu-my-uCG" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yfn-cf-G8o">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="cLk-Ga-SrV" kind="relationship" relationship="rootViewController" id="cRj-UW-CNQ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zEf-cB-a4K" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4383.1999999999998" y="-2403.1484257871066"/>
+        </scene>
+    </scenes>
+</document>

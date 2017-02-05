@@ -26,8 +26,8 @@ s.source = { :git => "https://github.com/maryamfekri/CameraManager.git", :tag =>
 s.framework = "UIKit"
 
 # 8
-s.source_files = "CustomCameraManagerClass/**/*.{swift}"
+s.source_files = "CameraManager/**/*.{swift}"
 
 # 9
-s.resources = "CustomCameraManagerClass/**/*.{png,jpeg,jpg,storyboard,xib}"
+s.resources = "CameraManager/**/*.{png,jpeg,jpg,storyboard,xib}"
 end

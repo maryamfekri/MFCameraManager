@@ -25,3 +25,15 @@
 
 ` cameraManager.transitionCamera() `
 
+- to enable torch mode use below code with level of torch mode default is 1 : 
+`cameraManager.enableTorchMode(level: 1)`
+
+- to capture an image showing on camera  : 
+` self.cameraManager.getcroppedImage { (UIImage, error) in
+            //your code here to handle with error or if error == nil , get the UIImage 
+        }`
+
+- to get the image inside a frame or CGRect , give the frame as a params to getcroppedImage function like below : 
+`self.cameraManager.getcroppedImage(with: self.rectLayer.frame) {
+           //your code here to handle with error or if error == nil , get the UIImage 
+        }`

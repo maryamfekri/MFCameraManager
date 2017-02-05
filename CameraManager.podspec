@@ -17,7 +17,7 @@ s.license = { :type => "MIT", :file => "LICENSE" }
 s.author = { "Maryam Fekri" => "maryamfekri.00@gmail.com" }
 
 # 5 - Replace this URL with your own Github page's URL (from the address bar)
-s.homepage = "https://github.com/maryamfekri/CameraManager/tree/master/CustomCameraManagerClass"
+s.homepage = "https://github.com/maryamfekri/CameraManager"
 
 # 6 - Replace this URL with your own Git URL from "Quick Setup"
 s.source = { :git => "https://github.com/maryamfekri/CameraManager.git", :tag => "#{s.version}"}
@@ -26,8 +26,8 @@ s.source = { :git => "https://github.com/maryamfekri/CameraManager.git", :tag =>
 s.framework = "UIKit"
 
 # 8
-s.source_files = "CameraManager/**/*.{swift}"
+s.source_files = "CustomCameraManagerClass/**/*.{swift}"
 
 # 9
-s.resources = "CameraManager/**/*.{png,jpeg,jpg,storyboard,xib}"
+s.resources = "CustomCameraManagerClass/**/*.{png,jpeg,jpg,storyboard,xib}"
 end

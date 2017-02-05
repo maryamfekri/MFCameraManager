@@ -3,8 +3,8 @@ Pod::Spec.new do |s|
 # 1
 s.platform = :ios
 s.ios.deployment_target = '8.0'
-s.name = "CameraManager"
-s.summary = "CameraManager manage camera session"
+s.name = "MFCameraManager"
+s.summary = "MFCameraManager manage camera session"
 s.requires_arc = true
 
 # 2
@@ -29,5 +29,5 @@ s.framework = "UIKit"
 s.source_files = "CustomCameraManagerClass/**/*.{swift}"
 
 # 9
-#s.resources = "CameraManager/**/*.{png,jpeg,jpg,storyboard,xib}"
+#@gmais.resources = "CameraManager/**/*.{png,jpeg,jpg,storyboard,xib}"
 end

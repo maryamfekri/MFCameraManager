@@ -13,24 +13,36 @@ import UIKit
 class CameraManager {
     
     //MARK: - Private Enum
+    /**
+        CameraDevice position.
+     
+     - back: back camera.
+     - front: front camera.
+
+     */
     private enum CameraDevice {
         case back
         case front
     }
     
     //MARK: - Private Variables
+    /// cameera device position
     private var cameraPosition : CameraDevice?
+    /// camera UIView
     private var cameraView : UIView?
+    /// preview layer for camera
     weak private var previewLayer : AVCaptureVideoPreviewLayer?
     
     //Private variables that cannot be accessed by other classes in any way.
+    /// view data output
     fileprivate var videoDataOutput : AVCaptureStillImageOutput?
+    /// camera session
     fileprivate var captureSession: AVCaptureSession!
     
     //MARK: - Actions
     
     /**
-     Start Running the camera session.
+     Setup the camera preview.
      - Parameter in:   UIView which camera preview will show on that.Actions
      - Parameter withPosition: a AVCaptureDevicePosition which is camera device position which default is back
      

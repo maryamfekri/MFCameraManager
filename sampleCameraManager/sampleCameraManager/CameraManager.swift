@@ -10,6 +10,7 @@ import Foundation
 import AVFoundation
 import UIKit
 
+/// manage camera session
 class CameraManager {
     
     //MARK: - Private Enum

@@ -1,8 +1,0 @@
-version: "Apple Swift version 3.0.2 (swiftlang-800.0.63 clang-800.0.42.1)"
-options: "8af497f487c8f3183d3f1bea85ecb9f8"
-build_time: [539681550, 89121000]
-inputs:
-  "/Users/fekri/Documents/CameraManager/sampleCameraManager/sampleCameraManager/AppDelegate.swift": [9223372036854775807, 0]
-  "/Users/fekri/Documents/CameraManager/sampleCameraManager/sampleCameraManager/Controllers/ImageViewController.swift": [9223372036854775807, 0]
-  "/Users/fekri/Documents/CameraManager/sampleCameraManager/sampleCameraManager/CameraManager.swift": [9223372036854775807, 0]
-  "/Users/fekri/Documents/CameraManager/sampleCameraManager/sampleCameraManager/Controllers/CameraViewController.swift": [9223372036854775807, 0]

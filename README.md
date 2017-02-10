@@ -75,7 +75,7 @@ self.cameraManager.getcroppedImage { (UIImage, error) in
 - to get the image inside a frame or CGRect , give the frame as a params to getcroppedImage function like below : 
 
 ```
-self.cameraManager.getcroppedImage(with: self.rectLayer.frame) {
+self.cameraManager.getcroppedImage(with: self.rectLayer.frame) {  (UIImage, error) in
          
        //your code here to handle with error or if error == nil , get the UIImage 
            

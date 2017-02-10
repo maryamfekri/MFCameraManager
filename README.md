@@ -27,13 +27,8 @@ Swift 3.0+
 
 
 ```
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '10.0'
-use_frameworks!
+pod 'MFCameraManager', '~> 1.0'
 
-target '<Your Target Name>' do
-    pod 'MFCameraManager'
-end 
 ```
 
 **or download CameraManager.swift file and add it manually to your project**  

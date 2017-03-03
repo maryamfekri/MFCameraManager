@@ -1,15 +1,23 @@
 //
 //  CameraManager.swift
+<<<<<<< HEAD
 //  Douugh
 //
 //  Created by Fekri on 12/28/16.
 //  Copyright © 2016 RoundTableApps. All rights reserved.
+=======
+//  Maryam Fekri
+//
+//  Created by Fekri on 12/28/16.
+//  Copyright © 2016 Maryam Fekri. All rights reserved.
+>>>>>>> 880d6fc643a1b0bff9fca379ee3771f3f2018d06
 //
 
 import Foundation
 import AVFoundation
 import UIKit
 
+<<<<<<< HEAD
 enum CameraDevice {
     case back
     case front
@@ -17,6 +25,18 @@ enum CameraDevice {
 
 class CameraManager {
     
+=======
+class CameraManager {
+    
+    //MARK: - Enums
+    private enum CameraDevice {
+        ///
+        case back
+        case front
+    }
+
+    //MARK: - Private Variables
+>>>>>>> 880d6fc643a1b0bff9fca379ee3771f3f2018d06
     private var cameraPosition : CameraDevice?
     private var cameraView : UIView?
     weak private var previewLayer : AVCaptureVideoPreviewLayer?
@@ -25,7 +45,19 @@ class CameraManager {
     fileprivate var videoDataOutput : AVCaptureStillImageOutput?
     fileprivate var captureSession: AVCaptureSession!
     
+<<<<<<< HEAD
     func captureSetup(in cameraView: UIView, with cameraPosition: CameraDevice? = .back) {
+=======
+    //MARK: - Actions
+    
+    /**
+     Start Running the camera session.
+     - Parameter in:   UIView which camera preview will show on that.Actions
+     - Parameter withPosition: a AVCaptureDevicePosition which is camera device position which default is back
+
+     */
+    func captureSetup(in cameraView: UIView, withPosition cameraPosition: AVCaptureDevicePosition? = .back) {
+>>>>>>> 880d6fc643a1b0bff9fca379ee3771f3f2018d06
         self.cameraView = cameraView
         self.cameraPosition = cameraPosition
         self.captureSession = AVCaptureSession()
@@ -37,24 +69,48 @@ class CameraManager {
         }
     }
     
+<<<<<<< HEAD
+=======
+    /**
+     Start Running the camera session.
+     */
+>>>>>>> 880d6fc643a1b0bff9fca379ee3771f3f2018d06
     func startRunning() {
         if (captureSession?.isRunning != true) {
             captureSession.startRunning()
         }
     }
     
+<<<<<<< HEAD
+=======
+    /**
+     Stop the camera session.
+     */
+>>>>>>> 880d6fc643a1b0bff9fca379ee3771f3f2018d06
     func stopRunning() {
         if (captureSession?.isRunning == true) {
             captureSession.stopRunning()
         }
     }
     
+<<<<<<< HEAD
+=======
+    /**
+     Update frame of camera preview
+     */
+>>>>>>> 880d6fc643a1b0bff9fca379ee3771f3f2018d06
     func updatePreviewFrame() {
         if cameraView != nil {
             self.previewLayer?.frame = cameraView!.bounds
         }
     }
     
+<<<<<<< HEAD
+=======
+    /**
+     change orientation of the camera when view is transitioning
+     */
+>>>>>>> 880d6fc643a1b0bff9fca379ee3771f3f2018d06
     func transitionCamera() {
         if let connection =  self.previewLayer?.connection  {
             let currentDevice: UIDevice = UIDevice.current
@@ -87,6 +143,14 @@ class CameraManager {
         
     }
     
+<<<<<<< HEAD
+=======
+    /**
+     Switch on torch mode for camera if its using the back camera
+     - Parameter level:   level for torch
+
+     */
+>>>>>>> 880d6fc643a1b0bff9fca379ee3771f3f2018d06
     func enableTorchMode(level: Float? = 1) {
         for testedDevice in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo){
             if ((testedDevice as AnyObject).position == AVCaptureDevicePosition.back && self.cameraPosition == .back) {
@@ -108,7 +172,18 @@ class CameraManager {
         }
     }
     
+<<<<<<< HEAD
     func getcroppedImage(with rect: CGRect? = nil, completionHandler: @escaping (UIImage?, Error?) -> Void){
+=======
+    /**
+     Get Image of the preview camera
+     
+     - Parameter croppWith:   CGRect to cropp the image inside it.
+     - Parameter completionHandler: block code which has the UIImage and any error of getting image out of data representation.
+
+     */
+    func getImage(croppWith rect: CGRect? = nil, completionHandler: @escaping (UIImage?, Error?) -> Void){
+>>>>>>> 880d6fc643a1b0bff9fca379ee3771f3f2018d06
         
         var croppedImage : UIImage?
         if let videoConnection = videoDataOutput?.connection(withMediaType: AVMediaTypeVideo) {
@@ -199,8 +274,15 @@ class CameraManager {
     
     /**
      this func will setup the camera and capture session and add to cameraView
+<<<<<<< HEAD
      */
     fileprivate func captureSetup (_ position : AVCaptureDevicePosition) {
+=======
+     - Parameter withDevicePosition:   AVCaptureDevicePosition which is the position of camera
+
+     */
+    fileprivate func captureSetup (withDevicePosition position : AVCaptureDevicePosition) {
+>>>>>>> 880d6fc643a1b0bff9fca379ee3771f3f2018d06
         
         captureSession.stopRunning()
         captureSession = AVCaptureSession()

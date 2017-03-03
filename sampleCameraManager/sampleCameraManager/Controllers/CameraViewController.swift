@@ -14,8 +14,7 @@ class CameraViewController: UIViewController {
     @IBOutlet weak var cameraView: UIView!
     
     var cameraManager = CameraManager()
-    var cameraPosition : CameraDevice?
-    
+  
     let maskLayer = CALayer()
     let rectLayer = CAShapeLayer()
     var rectPath = UIBezierPath()
@@ -128,7 +127,7 @@ class CameraViewController: UIViewController {
     }
     
     func captureAndCropp() {
-        self.cameraManager.getcroppedImage(with: self.rectLayer.frame) {
+        self.cameraManager.getImage(croppWith: self.rectLayer.frame) {
             (croppedImage, error) -> Void in
             OperationQueue.main.addOperation({
                 if croppedImage != nil {
@@ -143,8 +142,7 @@ class CameraViewController: UIViewController {
 extension CameraViewController {
     func initView() {
         
-        self.cameraPosition = .back
-        cameraManager.captureSetup(in: self.cameraView, with: .back)
+        cameraManager.captureSetup(in: self.cameraView, withPosition: .back)
         
     }
 }

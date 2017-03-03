@@ -1,60 +1,98 @@
 //
 //  CameraManager.swift
-//  Douugh
+//  Maryam Fekri
 //
 //  Created by Fekri on 12/28/16.
-//  Copyright © 2016 RoundTableApps. All rights reserved.
+//  Copyright © 2016 Maryam Fekri. All rights reserved.
 //
 
 import Foundation
 import AVFoundation
 import UIKit
 
-enum CameraDevice {
-    case back
-    case front
-}
-
+/// manage camera session
 class CameraManager {
     
+    //MARK: - Private Enum
+    /**
+        CameraDevice position.
+     
+     - back: back camera.
+     - front: front camera.
+
+     */
+    private enum CameraDevice {
+        case back
+        case front
+    }
+    
+    //MARK: - Private Variables
+    /// cameera device position
     private var cameraPosition : CameraDevice?
+    /// camera UIView
     private var cameraView : UIView?
+    /// preview layer for camera
     weak private var previewLayer : AVCaptureVideoPreviewLayer?
     
     //Private variables that cannot be accessed by other classes in any way.
-    fileprivate var stillImageOutput : AVCaptureStillImageOutput?
+    /// view data output
+    fileprivate var videoDataOutput : AVCaptureStillImageOutput?
+    /// camera session
     fileprivate var captureSession: AVCaptureSession!
     
-    func captureSetup(in cameraView: UIView, with cameraPosition: CameraDevice? = .back) {
+    //MARK: - Actions
+    
+    /**
+     Setup the camera preview.
+     - Parameter in:   UIView which camera preview will show on that.Actions
+     - Parameter withPosition: a AVCaptureDevicePosition which is camera device position which default is back
+     
+     */
+    func captureSetup(in cameraView: UIView, withPosition cameraPosition: AVCaptureDevicePosition? = .back) {
         self.cameraView = cameraView
-        self.cameraPosition = cameraPosition
         self.captureSession = AVCaptureSession()
         switch cameraPosition! {
         case .back:
-            self.captureSetup(AVCaptureDevicePosition.back)
+            self.captureSetup(withDevicePosition: .back)
+            self.cameraPosition = .back
         case .front:
-            self.captureSetup(AVCaptureDevicePosition.front)
+            self.captureSetup(withDevicePosition: .front)
+            self.cameraPosition = .front
+        default:
+            self.captureSetup(withDevicePosition: .back)
         }
     }
     
+    /**
+     Start Running the camera session.
+     */
     func startRunning() {
         if (captureSession?.isRunning != true) {
             captureSession.startRunning()
         }
     }
     
+    /**
+     Stop the camera session.
+     */
     func stopRunning() {
         if (captureSession?.isRunning == true) {
             captureSession.stopRunning()
         }
     }
     
+    /**
+     Update frame of camera preview
+     */
     func updatePreviewFrame() {
         if cameraView != nil {
             self.previewLayer?.frame = cameraView!.bounds
         }
     }
     
+    /**
+     change orientation of the camera when view is transitioning
+     */
     func transitionCamera() {
         if let connection =  self.previewLayer?.connection  {
             let currentDevice: UIDevice = UIDevice.current
@@ -87,7 +125,12 @@ class CameraManager {
         
     }
     
-    func enableTorchMode(with level: Float) {
+    /**
+     Switch on torch mode for camera if its using the back camera
+     - Parameter level:   level for torch
+     
+     */
+    func enableTorchMode(level: Float? = 1) {
         for testedDevice in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo){
             if ((testedDevice as AnyObject).position == AVCaptureDevicePosition.back && self.cameraPosition == .back) {
                 let currentDevice = testedDevice as! AVCaptureDevice
@@ -97,7 +140,7 @@ class CameraManager {
                         if currentDevice.isTorchActive {
                             currentDevice.torchMode = AVCaptureTorchMode.off
                         } else {
-                            try currentDevice.setTorchModeOnWithLevel(level)
+                            try currentDevice.setTorchModeOnWithLevel(level!)
                         }
                         currentDevice.unlockForConfiguration()
                     } catch {
@@ -108,11 +151,18 @@ class CameraManager {
         }
     }
     
-    func getcroppedImage(with rect: CGRect, completionHandler: @escaping (UIImage?, Error?) -> Void){
+    /**
+     Get Image of the preview camera
+     
+     - Parameter croppWith:   CGRect to cropp the image inside it.
+     - Parameter completionHandler: block code which has the UIImage and any error of getting image out of data representation.
+     
+     */
+    func getImage(croppWith rect: CGRect? = nil, completionHandler: @escaping (UIImage?, Error?) -> Void){
         
         var croppedImage : UIImage?
-        if let videoConnection = stillImageOutput?.connection(withMediaType: AVMediaTypeVideo) {
-            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection) {
+        if let videoConnection = videoDataOutput?.connection(withMediaType: AVMediaTypeVideo) {
+            videoDataOutput?.captureStillImageAsynchronously(from: videoConnection) {
                 (imageDataSampleBuffer, error) -> Void in
                 if imageDataSampleBuffer != nil {
                     let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
@@ -122,7 +172,7 @@ class CameraManager {
                     let capturedImage : UIImage = UIImage(data: imageData!)!
                     
                     let originalSize : CGSize
-                    let visibleLayerFrame = rect // THE ACTUAL VISIBLE AREA IN THE LAYER FRAME
+                    let visibleLayerFrame = rect ?? self.cameraView?.frame ?? CGRect.zero // THE ACTUAL VISIBLE AREA IN THE LAYER FRAME
                     
                     // Calculate the fractional size that is shown in the preview
                     if let metaRect : CGRect = (self.previewLayer?.metadataOutputRectOfInterest(for: visibleLayerFrame)) {
@@ -185,10 +235,10 @@ class CameraManager {
                         
                         
                         //save the original and cropped image in gallery
-//                        UIImageWriteToSavedPhotosAlbum(capturedImage, nil, nil, nil)
-//                        if croppedImage != nil {
-//                            UIImageWriteToSavedPhotosAlbum(croppedImage!, nil, nil, nil)
-//                        }
+                        //                        UIImageWriteToSavedPhotosAlbum(capturedImage, nil, nil, nil)
+                        //                        if croppedImage != nil {
+                        //                            UIImageWriteToSavedPhotosAlbum(croppedImage!, nil, nil, nil)
+                        //                        }
                     }
                 }
                 completionHandler(croppedImage, error)
@@ -199,8 +249,10 @@ class CameraManager {
     
     /**
      this func will setup the camera and capture session and add to cameraView
+     - Parameter withDevicePosition:   AVCaptureDevicePosition which is the position of camera
+     
      */
-    fileprivate func captureSetup (_ position : AVCaptureDevicePosition) {
+    fileprivate func captureSetup (withDevicePosition position : AVCaptureDevicePosition) {
         
         captureSession.stopRunning()
         captureSession = AVCaptureSession()
@@ -231,8 +283,8 @@ class CameraManager {
         }
         
         //Output
-        self.stillImageOutput = AVCaptureStillImageOutput()
-        self.stillImageOutput?.outputSettings = [AVVideoCodecKey:AVVideoCodecJPEG]
+        self.videoDataOutput = AVCaptureStillImageOutput()
+        self.videoDataOutput?.outputSettings = [AVVideoCodecKey:AVVideoCodecJPEG]
         
         if (captureError == nil) {
             if (captureSession.canAddInput(deviceInput)) {
@@ -240,8 +292,8 @@ class CameraManager {
             }
             
             
-            if (captureSession.canAddOutput(self.stillImageOutput)) {
-                captureSession.addOutput(self.stillImageOutput)
+            if (captureSession.canAddOutput(self.videoDataOutput)) {
+                captureSession.addOutput(self.videoDataOutput)
             }
         }
         

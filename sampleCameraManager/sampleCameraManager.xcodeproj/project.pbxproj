@@ -51,8 +51,8 @@
 			isa = PBXGroup;
 			children = (
 				A54E72411E4739B700B6E655 /* CameraViewController.swift */,
-				5CC70A531E69D80200623702 /* ScanBarcodeViewController.swift */,
 				A54E72431E473A7B00B6E655 /* ImageViewController.swift */,
+				5CC70A531E69D80200623702 /* ScanBarcodeViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";

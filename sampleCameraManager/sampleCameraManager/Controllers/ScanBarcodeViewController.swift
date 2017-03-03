@@ -14,7 +14,6 @@ class ScanBarcodeViewController: UIViewController {
     @IBOutlet weak var cameraView: UIView!
     
     var scanBarcodeCameraManager = ScanBarcodeCameraManager()
-    var cameraPosition : CameraDevice?
     
     let maskLayer = CALayer()
     let rectLayer = CAShapeLayer()
@@ -126,7 +125,6 @@ class ScanBarcodeViewController: UIViewController {
 extension ScanBarcodeViewController: ScanBarcodeCameraManagerDelegate {
     func initView() {
         
-        self.cameraPosition = .back
         self.scanBarcodeCameraManager.delegate = self
         scanBarcodeCameraManager.captureSetup(in: self.cameraView, with: .back)
         

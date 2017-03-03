@@ -16,6 +16,19 @@ protocol ScanBarcodeCameraManagerDelegate {
 
 class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate {
     
+    //MARK: - Private Enum
+    /**
+     CameraDevice position.
+     
+     - back: back camera.
+     - front: front camera.
+     
+     */
+    private enum CameraDevice {
+        case back
+        case front
+    }
+    
     private var cameraPosition : CameraDevice?
     private var cameraView : UIView?
     weak private var previewLayer : AVCaptureVideoPreviewLayer?
@@ -36,15 +49,18 @@ class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate
     private var focusLine = FocusLine()
 
     
-    func captureSetup(in cameraView: UIView, with cameraPosition: CameraDevice? = .back) {
+    func captureSetup(in cameraView: UIView, with cameraPosition: AVCaptureDevicePosition? = .back) {
         self.cameraView = cameraView
-        self.cameraPosition = cameraPosition
         self.captureSession = AVCaptureSession()
         switch cameraPosition! {
         case .back:
-            self.captureSetup(AVCaptureDevicePosition.back)
+            self.captureSetup(withDevicePosition: .back)
+            self.cameraPosition = .back
         case .front:
-            self.captureSetup(AVCaptureDevicePosition.front)
+            self.captureSetup(withDevicePosition: .front)
+            self.cameraPosition = .front
+        default:
+            self.captureSetup(withDevicePosition: .back)
         }
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ScanBarcodeCameraManager.onTap(_:)))
@@ -288,7 +304,7 @@ class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate
     /**
      this func will setup the camera and capture session and add to cameraView
      */
-    fileprivate func captureSetup (_ position : AVCaptureDevicePosition) {
+    fileprivate func captureSetup (withDevicePosition position : AVCaptureDevicePosition) {
         
         captureSession.stopRunning()
         captureSession = AVCaptureSession()

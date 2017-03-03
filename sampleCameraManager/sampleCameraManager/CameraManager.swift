@@ -22,7 +22,7 @@ class CameraManager {
     weak private var previewLayer : AVCaptureVideoPreviewLayer?
     
     //Private variables that cannot be accessed by other classes in any way.
-    fileprivate var videoDataOutput : AVCaptureStillImageOutput?
+    fileprivate var stillImageOutput : AVCaptureStillImageOutput?
     fileprivate var captureSession: AVCaptureSession!
     
     func captureSetup(in cameraView: UIView, with cameraPosition: CameraDevice? = .back) {
@@ -111,8 +111,8 @@ class CameraManager {
     func getcroppedImage(with rect: CGRect, completionHandler: @escaping (UIImage?, Error?) -> Void){
         
         var croppedImage : UIImage?
-        if let videoConnection = videoDataOutput?.connection(withMediaType: AVMediaTypeVideo) {
-            videoDataOutput?.captureStillImageAsynchronously(from: videoConnection) {
+        if let videoConnection = stillImageOutput?.connection(withMediaType: AVMediaTypeVideo) {
+            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection) {
                 (imageDataSampleBuffer, error) -> Void in
                 if imageDataSampleBuffer != nil {
                     let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
@@ -231,8 +231,8 @@ class CameraManager {
         }
         
         //Output
-        self.videoDataOutput = AVCaptureStillImageOutput()
-        self.videoDataOutput?.outputSettings = [AVVideoCodecKey:AVVideoCodecJPEG]
+        self.stillImageOutput = AVCaptureStillImageOutput()
+        self.stillImageOutput?.outputSettings = [AVVideoCodecKey:AVVideoCodecJPEG]
         
         if (captureError == nil) {
             if (captureSession.canAddInput(deviceInput)) {
@@ -240,8 +240,8 @@ class CameraManager {
             }
             
             
-            if (captureSession.canAddOutput(self.videoDataOutput)) {
-                captureSession.addOutput(self.videoDataOutput)
+            if (captureSession.canAddOutput(self.stillImageOutput)) {
+                captureSession.addOutput(self.stillImageOutput)
             }
         }
         

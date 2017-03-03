@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bMu-my-uCG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bMu-my-uCG">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -7,14 +7,13 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Scan document-->
+        <!--camera-->
         <scene sceneID="75G-fW-b9B">
             <objects>
-                <viewController title="Scan document" id="cLk-Ga-SrV" customClass="CameraViewController" customModule="sampleCameraManager" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="camera" id="cLk-Ga-SrV" customClass="CameraViewController" customModule="sampleCameraManager" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Qa0-7P-B5K"/>
                         <viewControllerLayoutGuide type="bottom" id="Z7j-CN-VQd"/>
@@ -51,7 +50,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="useFlashButtonTouchedUpInside:" destination="cLk-Ga-SrV" eventType="touchUpInside" id="CBY-hD-rzQ"/>
+                                            <action selector="captureButtonTouchedUpInside:" destination="cLk-Ga-SrV" eventType="touchDragInside" id="We8-mq-hwL"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -94,7 +93,7 @@
                 </tapGestureRecognizer>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XLj-wL-5Ff" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3444" y="-2403.1484257871066"/>
+            <point key="canvasLocation" x="-3084" y="-2751"/>
         </scene>
         <!--Image View-->
         <scene sceneID="fyB-Kh-yyK">
@@ -109,7 +108,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cl8-hN-Y70">
-                                <rect key="frame" x="38" y="138" width="300" height="191"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                         <real key="value" value="0.0"/>
@@ -119,39 +118,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="cl8-hN-Y70" firstAttribute="width" secondItem="K0X-Bj-C75" secondAttribute="width" multiplier="1:2.25" id="1d7-QE-88p"/>
-                            <constraint firstItem="cl8-hN-Y70" firstAttribute="leading" secondItem="K0X-Bj-C75" secondAttribute="leadingMargin" constant="13" id="4fE-8L-FDa"/>
-                            <constraint firstItem="cl8-hN-Y70" firstAttribute="height" secondItem="K0X-Bj-C75" secondAttribute="height" multiplier="1:2" id="BD6-2t-AZm"/>
-                            <constraint firstItem="cl8-hN-Y70" firstAttribute="centerY" secondItem="K0X-Bj-C75" secondAttribute="centerY" id="CK0-id-yjb"/>
-                            <constraint firstItem="cl8-hN-Y70" firstAttribute="width" secondItem="K0X-Bj-C75" secondAttribute="width" multiplier="1:1.25" id="FYc-w2-ZR6"/>
-                            <constraint firstItem="cl8-hN-Y70" firstAttribute="centerY" secondItem="K0X-Bj-C75" secondAttribute="centerY" constant="-100" id="FhV-tb-JEt"/>
-                            <constraint firstItem="cl8-hN-Y70" firstAttribute="height" secondItem="K0X-Bj-C75" secondAttribute="height" multiplier="1:3.5" id="UOH-N0-LO6"/>
-                            <constraint firstItem="cl8-hN-Y70" firstAttribute="centerX" secondItem="K0X-Bj-C75" secondAttribute="centerX" id="W1h-8T-puR"/>
+                            <constraint firstAttribute="trailing" secondItem="cl8-hN-Y70" secondAttribute="trailing" id="Feu-7G-OkK"/>
+                            <constraint firstItem="cl8-hN-Y70" firstAttribute="top" secondItem="rEu-pu-4sR" secondAttribute="bottom" id="MOx-p6-E9s"/>
+                            <constraint firstItem="cl8-hN-Y70" firstAttribute="leading" secondItem="K0X-Bj-C75" secondAttribute="leading" id="kg2-mA-oKF"/>
+                            <constraint firstItem="ta5-6l-mCP" firstAttribute="top" secondItem="cl8-hN-Y70" secondAttribute="bottom" id="mF3-Hl-gsb"/>
                         </constraints>
-                        <variation key="heightClass=compact-widthClass=compact">
-                            <mask key="constraints">
-                                <exclude reference="FhV-tb-JEt"/>
-                                <exclude reference="W1h-8T-puR"/>
-                                <exclude reference="FYc-w2-ZR6"/>
-                                <exclude reference="UOH-N0-LO6"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=compact-widthClass=regular">
-                            <mask key="constraints">
-                                <exclude reference="FhV-tb-JEt"/>
-                                <exclude reference="W1h-8T-puR"/>
-                                <exclude reference="FYc-w2-ZR6"/>
-                                <exclude reference="UOH-N0-LO6"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
-                            <mask key="constraints">
-                                <exclude reference="CK0-id-yjb"/>
-                                <exclude reference="BD6-2t-AZm"/>
-                                <exclude reference="4fE-8L-FDa"/>
-                                <exclude reference="1d7-QE-88p"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
                         <outlet property="caprturesImageView" destination="cl8-hN-Y70" id="OBL-rJ-uxR"/>
@@ -159,7 +130,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CoU-4R-rfC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2423.1999999999998" y="-2403.1484257871066"/>
+            <point key="canvasLocation" x="-2172" y="-2403"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XXp-g1-ZnX">
@@ -172,12 +143,127 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="cLk-Ga-SrV" kind="relationship" relationship="rootViewController" id="cRj-UW-CNQ"/>
+                        <segue destination="WDi-uz-3WO" kind="relationship" relationship="rootViewController" id="SYY-ZG-CBK"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zEf-cB-a4K" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4383.1999999999998" y="-2403.1484257871066"/>
+            <point key="canvasLocation" x="-4673" y="-2403"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="vaf-yB-3YP">
+            <objects>
+                <tableViewController id="WDi-uz-3WO" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="RnH-H9-4Xe">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="nDK-f4-kBQ">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="61" id="QyA-g9-9or">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="61"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QyA-g9-9or" id="QNy-rb-UFc">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera view ( capture an image )" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IOJ-Bg-3XV">
+                                                    <rect key="frame" x="16" y="16" width="343" height="28.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="IOJ-Bg-3XV" firstAttribute="leading" secondItem="QNy-rb-UFc" secondAttribute="leadingMargin" constant="8" id="2pb-ga-cr3"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="IOJ-Bg-3XV" secondAttribute="trailing" constant="8" id="M3r-T4-kqX"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="IOJ-Bg-3XV" secondAttribute="bottom" constant="8" id="UXL-Nw-PrO"/>
+                                                <constraint firstItem="IOJ-Bg-3XV" firstAttribute="top" secondItem="QNy-rb-UFc" secondAttribute="topMargin" constant="8" id="igh-CC-26p"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="cLk-Ga-SrV" kind="show" id="0Ws-0w-9gA"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="68" id="LD1-yC-gpQ">
+                                        <rect key="frame" x="0.0" y="61" width="375" height="68"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LD1-yC-gpQ" id="iby-ir-Yeq">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera view (scan barcode and capture image)" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HoO-np-p0T">
+                                                    <rect key="frame" x="8" y="8" width="359" height="51"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="HoO-np-p0T" secondAttribute="trailing" constant="8" id="1D6-ec-0oR"/>
+                                                <constraint firstItem="HoO-np-p0T" firstAttribute="top" secondItem="iby-ir-Yeq" secondAttribute="top" constant="8" id="N37-wS-bJM"/>
+                                                <constraint firstAttribute="bottom" secondItem="HoO-np-p0T" secondAttribute="bottom" constant="8" id="WrK-Rb-ky8"/>
+                                                <constraint firstItem="HoO-np-p0T" firstAttribute="leading" secondItem="iby-ir-Yeq" secondAttribute="leading" constant="8" id="bsv-gW-mac"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="1OS-xY-Hbv" kind="show" id="nud-FB-JhK"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="WDi-uz-3WO" id="DZU-Wa-Xtb"/>
+                            <outlet property="delegate" destination="WDi-uz-3WO" id="WHx-Mq-uRt"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="knw-84-FNm"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xyv-33-zY7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3884" y="-2403.1484257871066"/>
+        </scene>
+        <!--scanner-->
+        <scene sceneID="8Jb-d8-cd2">
+            <objects>
+                <viewController title="scanner" id="1OS-xY-Hbv" customClass="ScanBarcodeViewController" customModule="sampleCameraManager" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="hwL-nx-sGv"/>
+                        <viewControllerLayoutGuide type="bottom" id="Dlf-Rd-PoF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tsw-iu-xLj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="80i-yK-Ix8">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="80i-yK-Ix8" secondAttribute="trailing" id="4Ff-Pj-SVP"/>
+                            <constraint firstItem="Dlf-Rd-PoF" firstAttribute="top" secondItem="80i-yK-Ix8" secondAttribute="bottom" id="PHY-wL-znz"/>
+                            <constraint firstItem="80i-yK-Ix8" firstAttribute="leading" secondItem="tsw-iu-xLj" secondAttribute="leading" id="VRC-Zi-kE3"/>
+                            <constraint firstItem="80i-yK-Ix8" firstAttribute="top" secondItem="hwL-nx-sGv" secondAttribute="bottom" id="lk9-r6-gmD"/>
+                            <constraint firstItem="80i-yK-Ix8" firstAttribute="centerX" secondItem="tsw-iu-xLj" secondAttribute="centerX" id="yB5-ns-ybK"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Camera" id="WUp-CY-lOO"/>
+                    <connections>
+                        <outlet property="cameraView" destination="80i-yK-Ix8" id="YKK-i5-aa2"/>
+                        <segue destination="vZM-hW-vGd" kind="show" identifier="CameraView2ImageView" id="ia8-Qf-zaY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uey-Oe-APE" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3084" y="-2055"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="ia8-Qf-zaY"/>
+    </inferredMetricsTieBreakers>
 </document>

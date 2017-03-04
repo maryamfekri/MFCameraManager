@@ -11,7 +11,7 @@ import AVFoundation
 import UIKit
 
 /// manage camera session
-class CameraManager {
+open class CameraManager: NSObject {
     
     //MARK: - Private Enum
     /**
@@ -36,7 +36,7 @@ class CameraManager {
     
     //Private variables that cannot be accessed by other classes in any way.
     /// view data output
-    fileprivate var videoDataOutput : AVCaptureStillImageOutput?
+    fileprivate var stillImageOutput : AVCaptureStillImageOutput?
     /// camera session
     fileprivate var captureSession: AVCaptureSession!
     
@@ -48,7 +48,7 @@ class CameraManager {
      - Parameter withPosition: a AVCaptureDevicePosition which is camera device position which default is back
      
      */
-    func captureSetup(in cameraView: UIView, withPosition cameraPosition: AVCaptureDevicePosition? = .back) {
+    open func captureSetup(in cameraView: UIView, withPosition cameraPosition: AVCaptureDevicePosition? = .back) {
         self.cameraView = cameraView
         self.captureSession = AVCaptureSession()
         switch cameraPosition! {
@@ -66,7 +66,7 @@ class CameraManager {
     /**
      Start Running the camera session.
      */
-    func startRunning() {
+    open func startRunning() {
         if (captureSession?.isRunning != true) {
             captureSession.startRunning()
         }
@@ -75,7 +75,7 @@ class CameraManager {
     /**
      Stop the camera session.
      */
-    func stopRunning() {
+    open func stopRunning() {
         if (captureSession?.isRunning == true) {
             captureSession.stopRunning()
         }
@@ -84,7 +84,7 @@ class CameraManager {
     /**
      Update frame of camera preview
      */
-    func updatePreviewFrame() {
+    open func updatePreviewFrame() {
         if cameraView != nil {
             self.previewLayer?.frame = cameraView!.bounds
         }
@@ -93,7 +93,7 @@ class CameraManager {
     /**
      change orientation of the camera when view is transitioning
      */
-    func transitionCamera() {
+    open func transitionCamera() {
         if let connection =  self.previewLayer?.connection  {
             let currentDevice: UIDevice = UIDevice.current
             let orientation: UIDeviceOrientation = currentDevice.orientation
@@ -130,7 +130,7 @@ class CameraManager {
      - Parameter level:   level for torch
      
      */
-    func enableTorchMode(level: Float? = 1) {
+    open func enableTorchMode(level: Float? = 1) {
         for testedDevice in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo){
             if ((testedDevice as AnyObject).position == AVCaptureDevicePosition.back && self.cameraPosition == .back) {
                 let currentDevice = testedDevice as! AVCaptureDevice
@@ -158,11 +158,11 @@ class CameraManager {
      - Parameter completionHandler: block code which has the UIImage and any error of getting image out of data representation.
      
      */
-    func getImage(croppWith rect: CGRect? = nil, completionHandler: @escaping (UIImage?, Error?) -> Void){
+    open func getImage(croppWith rect: CGRect? = nil, completionHandler: @escaping (UIImage?, Error?) -> Void){
         
         var croppedImage : UIImage?
-        if let videoConnection = videoDataOutput?.connection(withMediaType: AVMediaTypeVideo) {
-            videoDataOutput?.captureStillImageAsynchronously(from: videoConnection) {
+        if let videoConnection = stillImageOutput?.connection(withMediaType: AVMediaTypeVideo) {
+            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection) {
                 (imageDataSampleBuffer, error) -> Void in
                 if imageDataSampleBuffer != nil {
                     let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
@@ -283,8 +283,8 @@ class CameraManager {
         }
         
         //Output
-        self.videoDataOutput = AVCaptureStillImageOutput()
-        self.videoDataOutput?.outputSettings = [AVVideoCodecKey:AVVideoCodecJPEG]
+        self.stillImageOutput = AVCaptureStillImageOutput()
+        self.stillImageOutput?.outputSettings = [AVVideoCodecKey:AVVideoCodecJPEG]
         
         if (captureError == nil) {
             if (captureSession.canAddInput(deviceInput)) {
@@ -292,8 +292,8 @@ class CameraManager {
             }
             
             
-            if (captureSession.canAddOutput(self.videoDataOutput)) {
-                captureSession.addOutput(self.videoDataOutput)
+            if (captureSession.canAddOutput(self.stillImageOutput)) {
+                captureSession.addOutput(self.stillImageOutput)
             }
         }
         

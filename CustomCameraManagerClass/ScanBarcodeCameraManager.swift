@@ -10,11 +10,11 @@ import Foundation
 import AVFoundation
 import UIKit
 
-protocol ScanBarcodeCameraManagerDelegate {
+public protocol ScanBarcodeCameraManagerDelegate {
     func scanBarcodeCameraManagerDidRecognizeBarcode(barcode: Array<AVMetadataMachineReadableCodeObject>, image: UIImage?)
 }
 
-class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate {
+open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate {
     
     //MARK: - Private Enum
     /**
@@ -49,7 +49,7 @@ class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate
     private var focusLine = FocusLine()
 
     
-    func captureSetup(in cameraView: UIView, with cameraPosition: AVCaptureDevicePosition? = .back) {
+    open func captureSetup(in cameraView: UIView, with cameraPosition: AVCaptureDevicePosition? = .back) {
         self.cameraView = cameraView
         self.captureSession = AVCaptureSession()
         switch cameraPosition! {
@@ -67,19 +67,19 @@ class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate
         self.cameraView?.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    func startRunning() {
+    open func startRunning() {
         if (captureSession?.isRunning != true) {
             captureSession.startRunning()
         }
     }
     
-    func stopRunning() {
+    open func stopRunning() {
         if (captureSession?.isRunning == true) {
             captureSession.stopRunning()
         }
     }
     
-    func updatePreviewFrame() {
+    open func updatePreviewFrame() {
         if cameraView != nil {
             self.previewLayer?.frame = cameraView!.bounds
             self.focusMarkLayer.frame = cameraView!.bounds
@@ -87,7 +87,7 @@ class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate
         }
     }
     
-    func transitionCamera() {
+    open func transitionCamera() {
         if let connection =  self.previewLayer?.connection  {
             let currentDevice: UIDevice = UIDevice.current
             let orientation: UIDeviceOrientation = currentDevice.orientation
@@ -187,7 +187,7 @@ class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate
         }
     }
     
-    func enableTorchMode(with level: Float) {
+    open func enableTorchMode(with level: Float) {
         for testedDevice in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo){
             if ((testedDevice as AnyObject).position == AVCaptureDevicePosition.back && self.cameraPosition == .back) {
                 let currentDevice = testedDevice as! AVCaptureDevice
@@ -420,7 +420,7 @@ class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate
     
     
     
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+    public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         
         if !isBusy {
             isBusy = true

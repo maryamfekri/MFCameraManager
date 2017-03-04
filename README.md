@@ -6,6 +6,9 @@
 
 ● crop image in a frame
 
+● scan barcode and get the image asynchronously  
+
+
 # Requirements :
 
 iOS 8.0+
@@ -27,11 +30,11 @@ Swift 3.0+
 
 
 ```
-pod 'MFCameraManager', '~> 1.0'
+pod 'MFCameraManager'
 
 ```
 
-**or download CameraManager.swift file and add it manually to your project**  
+**or download CustomCameraManagerClass directory and add it manually to your project**  
 
 # Setup :
 

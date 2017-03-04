@@ -44,7 +44,10 @@ Now in your view add a UIView to storyboard view controller or programmetically 
 
 **but if you need the camera session to scan barcode beside capturing image you have to use ScanBarcodeCameraManager.swift class, as it has StillImageOutput.** 
 
-**initial step** Create a variable of which class you prefer (ScanBarcodeCameraManager.swift or CameraManager.swift) :
+**initial step**
+---------------------------------------------------------------------------
+
+Create a variable of which class you prefer (ScanBarcodeCameraManager.swift or CameraManager.swift) :
 
 `  var cameraManager = CameraManager() `
 

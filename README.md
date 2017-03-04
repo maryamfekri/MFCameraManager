@@ -40,31 +40,40 @@ pod 'MFCameraManager'
 
 Now in your view add a UIView to storyboard view controller or programmetically initiate an UIView which will be your camera preview. then follow steps to display the camera : 
 
-1 - Create a variable of class Camera Manager :
+** If you just need the camera session and capturing image you have to use CameraManager.swift class, as it has StillImageOutput. ** 
+** but if you need the camera session to scan barcode beside capturing image you have to use ScanBarcodeCameraManager.swift class, as it has StillImageOutput. ** 
+
+**initial step** Create a variable of which class you prefer (ScanBarcodeCameraManager.swift or CameraManager.swift) :
 
 `  var cameraManager = CameraManager() `
 
-2- on your viewDidLoad setup the camera with your UIView created to show the camera preview inside it, and your camera position which its default is back :
+or 
+
+`  var cameraManager = ScanBarcodeCameraManager() `
+
+
+from now on below 4 steps are similar in each class you instantiated :
+
+1 - on your viewDidLoad setup the camera with your UIView created to show the camera preview inside it, and your camera position which its default is back :
 
 `  cameraManager.captureSetup(in: self.cameraView, with: .back) `
 
 
-3 - in viewWillApear delegate call this method : 
+2 - in viewWillApear delegate call this method : 
 
 `   cameraManager.startRunning() `
 
-4 - in viewDidDisapear delegate call below method :
+3 - in viewDidDisapear delegate call below method :
 
 ` cameraManager.stopRunning() `
 
-5 - to support landscape transitions add below code to viewWillTransition Delegate : 
+4 - to support landscape transitions add below code to viewWillTransition Delegate : 
 
 ` cameraManager.transitionCamera() `
 
-----------------------------
-- to enable torch mode use below code with level of torch mode default is 1 : 
 
-`cameraManager.enableTorchMode(level: 1)`
+**features in CameraManager class**
+----------------------------
 
 - to capture an image showing on camera  : 
 
@@ -85,6 +94,39 @@ self.cameraManager.getcroppedImage(with: self.rectLayer.frame) {  (UIImage, erro
  }
 
 ```
+
+**features in ScanBarcodeCameraManager class**
+----------------------------
+
+- to get the scanned barcode and capture an image : 
+
+should conform to protocol ScanBarcodeCameraManagerDelegate and : 
+
+```
+self.cameraManager.delegate = self
+
+```
+
+then implement the function to get the barcode objects and also the captured image :
+
+```
+func scanBarcodeCameraManagerDidRecognizeBarcode(barcode: Array<AVMetadataMachineReadableCodeObject>, image: UIImage?) {
+        self.scanBarcodeCameraManager.stopRunning()
+        print(barcode)
+        // to whatever you like to the barcode objects and the image
+        scanBarcodeCameraManager.startRunning()
+
+    }
+```
+
+**Extra features in all classess**
+----------------------------
+- to enable torch mode use below code with level of torch mode default is 1 : 
+
+`cameraManager.enableTorchMode(level: 1)`
+
+
+
 
 # Communication :
 

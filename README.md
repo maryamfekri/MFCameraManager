@@ -41,7 +41,8 @@ pod 'MFCameraManager'
 Now in your view add a UIView to storyboard view controller or programmetically initiate an UIView which will be your camera preview. then follow steps to display the camera : 
 
 **If you just need the camera session and capturing image you have to use CameraManager.swift class, as it has StillImageOutput.** 
-** but if you need the camera session to scan barcode beside capturing image you have to use ScanBarcodeCameraManager.swift class, as it has StillImageOutput. ** 
+
+**but if you need the camera session to scan barcode beside capturing image you have to use ScanBarcodeCameraManager.swift class, as it has StillImageOutput.** 
 
 **initial step** Create a variable of which class you prefer (ScanBarcodeCameraManager.swift or CameraManager.swift) :
 

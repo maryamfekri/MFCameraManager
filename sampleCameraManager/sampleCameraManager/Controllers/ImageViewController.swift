@@ -15,7 +15,7 @@ class ImageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         initView()
     }
 }
@@ -23,11 +23,9 @@ class ImageViewController: UIViewController {
 // MARK: - InitView
 extension ImageViewController {
     func initView() {
-        
+
         if self.image != nil {
             self.caprturesImageView.image = self.image
         }
     }
 }
-
-                                                                                                                                                                                                                                                                                                                        

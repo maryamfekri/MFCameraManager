@@ -339,8 +339,8 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
 
             if self.captureSession.canAddOutput(self.metaDataOutput!) {
                 self.captureSession.addOutput(self.metaDataOutput!)
-                if let metadataObjectTypes = metadataObjectTypes {
-                    self.metaDataOutput?.metadataObjectTypes = metadataObjectTypes as! [AVMetadataObject.ObjectType]
+                if let metadataObjectTypes = metadataObjectTypes as? [AVMetadataObject.ObjectType] {
+                    self.metaDataOutput?.metadataObjectTypes = metadataObjectTypes
                 } else {
                     self.metaDataOutput?.metadataObjectTypes = self.metaDataOutput?.availableMetadataObjectTypes
                 }
@@ -401,8 +401,7 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
                 if let videoPreviewLayer = self.previewLayer {
                     if let transformedMetadataObject = videoPreviewLayer
                         .transformedMetadataObject(for: metadataObject ) {
-                        if transformedMetadataObject.isKind(of: AVMetadataMachineReadableCodeObject.self) {
-                            let barcodeObject = transformedMetadataObject as! AVMetadataMachineReadableCodeObject
+                        if let barcodeObject = transformedMetadataObject as? AVMetadataMachineReadableCodeObject {
                             barcodeObjects.append(barcodeObject)
                             corners.append(barcodeObject.corners)
                         }

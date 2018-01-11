@@ -38,14 +38,17 @@ class FocusLine: CALayer {
                 if i == corners.count {
                     idx = 0
                 }
-                let dict = corners[idx] as! NSDictionary
 
-                let x = CGFloat((dict.object(forKey: "X") as! NSNumber).floatValue)
-                let y = CGFloat((dict.object(forKey: "Y") as! NSNumber).floatValue)
-                if i == 0 {
-                    ctx.move(to: CGPoint(x: x, y: y))
-                } else {
-                    ctx.addLine(to: CGPoint(x: x, y: y))
+                if let dict = corners[idx] as? NSDictionary,
+                    let rawXPosition = dict.object(forKey: "X") as? NSNumber,
+                    let rawYPosition = dict.object(forKey: "Y") as? NSNumber {
+                    let x = CGFloat(truncating: rawXPosition)
+                    let y = CGFloat(truncating: rawYPosition)
+                    if i == 0 {
+                        ctx.move(to: CGPoint(x: x, y: y))
+                    } else {
+                        ctx.addLine(to: CGPoint(x: x, y: y))
+                    }
                 }
             }
         }

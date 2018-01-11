@@ -10,14 +10,14 @@ import UIKit
 
 class ImageViewController: UIViewController {
 
-    //=================
+    //================
     // MARK: - Variables
-    //=================
+    //================
     var image: UIImage?
 
-    //===============
+    //=============
     // MARK: Outlets
-    //===============
+    //=============
     @IBOutlet weak var caprturesImageView: UIImageView!
 
 }

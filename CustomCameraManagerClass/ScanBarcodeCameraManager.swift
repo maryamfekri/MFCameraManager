@@ -10,24 +10,7 @@ import Foundation
 import AVFoundation
 import UIKit
 
-public protocol ScanBarcodeCameraManagerDelegate {
-    func scanBarcodeCameraManagerDidRecognizeBarcode(barcode: Array<AVMetadataMachineReadableCodeObject>, image: UIImage?)
-}
-
 open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDelegate {
-
-    // MARK: - Private Enum
-    /**
-     CameraDevice position.
-     
-     - back: back camera.
-     - front: front camera.
-     
-     */
-    private enum CameraDevice {
-        case back
-        case front
-    }
 
     private var cameraPosition: CameraDevice?
     private var cameraView: UIView?
@@ -38,7 +21,7 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
     fileprivate var stillImageOutput: AVCaptureStillImageOutput?
     fileprivate var captureSession: AVCaptureSession!
 
-    var delegate: ScanBarcodeCameraManagerDelegate?
+    weak var delegate: ScanBarcodeCameraManagerDelegate?
     private var captureDevice: AVCaptureDevice!
     private var isFocusMode = false
     private var isAutoUpdateLensPosition = false
@@ -62,18 +45,19 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
             self.captureSetup(withDevicePosition: .back)
         }
 
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ScanBarcodeCameraManager.onTap(_:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                          action: #selector(ScanBarcodeCameraManager.onTap(_:)))
         self.cameraView?.addGestureRecognizer(tapGestureRecognizer)
     }
 
     open func startRunning() {
-        if (captureSession?.isRunning != true) {
+        if captureSession?.isRunning != true {
             captureSession.startRunning()
         }
     }
 
     open func stopRunning() {
-        if (captureSession?.isRunning == true) {
+        if captureSession?.isRunning == true {
             captureSession.stopRunning()
         }
     }
@@ -93,23 +77,18 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
 
             let previewLayerConnection: AVCaptureConnection = connection
 
-            if (previewLayerConnection.isVideoOrientationSupported) {
-                switch (orientation) {
+            if previewLayerConnection.isVideoOrientationSupported {
+                switch orientation {
                 case .portrait:
                     previewLayerConnection.videoOrientation = AVCaptureVideoOrientation.portrait
-                    break
                 case .landscapeRight:
                     previewLayerConnection.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
-                    break
                 case .landscapeLeft:
                     previewLayerConnection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
-                    break
                 case .portraitUpsideDown:
                     previewLayerConnection.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
-                    break
                 default:
                     previewLayerConnection.videoOrientation = AVCaptureVideoOrientation.portrait
-                    break
                 }
             }
         }
@@ -186,9 +165,11 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
 
     open func enableTorchMode(with level: Float) {
         for testedDevice in AVCaptureDevice.devices(for: AVMediaType.video) {
-            if ((testedDevice as AnyObject).position == AVCaptureDevice.Position.back && self.cameraPosition == .back) {
+            if (testedDevice as AnyObject).position == AVCaptureDevice.Position.back
+                && self.cameraPosition == .back {
                 let currentDevice = testedDevice
-                if currentDevice.isTorchAvailable && currentDevice.isTorchModeSupported(AVCaptureDevice.TorchMode.auto) {
+                if currentDevice.isTorchAvailable
+                    && currentDevice.isTorchModeSupported(AVCaptureDevice.TorchMode.auto) {
                     do {
                         try currentDevice.lockForConfiguration()
                         if currentDevice.isTorchActive {
@@ -205,12 +186,12 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
         }
     }
 
-    func getImage(croppedWith rect: CGRect? = nil, completionHandler: @escaping (UIImage?, Error?) -> Void) {
+    func getImage(croppedWith rect: CGRect? = nil, completionHandler: @escaping MFCameraMangerCompletion) {
 
         var image: UIImage?
         if let videoConnection = stillImageOutput?.connection(with: AVMediaType.video) {
-            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection) {
-                (imageDataSampleBuffer, error) -> Void in
+            stillImageOutput?
+                .captureStillImageAsynchronously(from: videoConnection) { (imageDataSampleBuffer, error) -> Void in
                 if imageDataSampleBuffer != nil {
                     let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer!)
 
@@ -222,8 +203,11 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
 
                     if rect != nil {
                         // Calculate the fractional size that is shown in the preview
-                        if let metaRect: CGRect = (self.previewLayer?.metadataOutputRectConverted(fromLayerRect: rect!)) {
-                            if (image!.imageOrientation == UIImageOrientation.left || image!.imageOrientation == UIImageOrientation.right) {
+                        if let metaRect = self
+                            .previewLayer?
+                            .metadataOutputRectConverted(fromLayerRect: rect!) {
+                            if image!.imageOrientation == UIImageOrientation.left
+                                || image!.imageOrientation == UIImageOrientation.right {
                                 // For these images (which are portrait), swap the size of the
                                 // image, because here the output image is actually rotated
                                 // relative to what you see on screen.
@@ -245,7 +229,7 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
                             let currentDevice: UIDevice = UIDevice.current
                             let orientation: UIDeviceOrientation = currentDevice.orientation
                             if self.cameraPosition == .back {
-                                switch (orientation) {
+                                switch orientation {
                                 case .portrait:
                                     imageOrientation = .right
                                 case .portraitUpsideDown:
@@ -256,10 +240,9 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
                                     imageOrientation = .up
                                 default:
                                     imageOrientation = .right
-                                    break
                                 }
                             } else {
-                                switch (orientation) {
+                                switch orientation {
                                 case .portrait:
                                     imageOrientation = .leftMirrored
                                 case .portraitUpsideDown:
@@ -270,13 +253,12 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
                                     imageOrientation = .downMirrored
                                 default:
                                     imageOrientation = .leftMirrored
-                                    break
                                 }
                             }
 
                             image =
                                 UIImage(cgImage: image!.cgImage!.cropping(to: cropRect)!,
-                                        scale:1,
+                                        scale: 1,
                                         orientation: imageOrientation! )
 
                         }
@@ -308,12 +290,11 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
         var captureError: NSError?
 
         //Device
-        for testedDevice in AVCaptureDevice.devices(for: AVMediaType.video) {
-            if ((testedDevice as AnyObject).position == position) {
+        for testedDevice in AVCaptureDevice.devices(for: AVMediaType.video)
+            where (testedDevice as AnyObject).position == position {
                 captureDevice = testedDevice
-            }
         }
-        if (captureDevice == nil) {
+        if captureDevice == nil {
             captureDevice = AVCaptureDevice.default(for: AVMediaType.video)
         }
 
@@ -335,7 +316,8 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
 
         if self.metaDataOutput?.metadataObjectsDelegate == nil
             || self.metaDataOutput?.metadataObjectsCallbackQueue == nil {
-            let queue = DispatchQueue(label: "com.pdq.rsbarcodes.metadata", attributes: DispatchQueue.Attributes.concurrent)
+            let queue = DispatchQueue(label: "com.pdq.rsbarcodes.metadata",
+                                      attributes: .concurrent)
             self.metaDataOutput?.setMetadataObjectsDelegate(self, queue: queue)
         }
 
@@ -348,10 +330,10 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
 
         //Output stillImage
         self.stillImageOutput = AVCaptureStillImageOutput()
-        self.stillImageOutput?.outputSettings = [AVVideoCodecKey:AVVideoCodecJPEG]
+        self.stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
 
-        if (captureError == nil) {
-            if (captureSession.canAddInput(deviceInput!)) {
+        if captureError == nil {
+            if captureSession.canAddInput(deviceInput!) {
                 captureSession.addInput(deviceInput!)
             }
 
@@ -364,7 +346,7 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
                 }
             }
 
-            if (captureSession.canAddOutput(self.stillImageOutput!)) {
+            if captureSession.canAddOutput(self.stillImageOutput!) {
                 captureSession.addOutput(self.stillImageOutput!)
             }
         }
@@ -390,37 +372,35 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
         let currentDevice: UIDevice = UIDevice.current
         let orientation: UIDeviceOrientation = currentDevice.orientation
         let previewLayerConnection =  self.previewLayer?.connection
-        switch (orientation) {
+        switch orientation {
         case .portrait:
             previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.portrait
-            break
         case .landscapeRight:
             previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
-            break
         case .landscapeLeft:
             previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.landscapeRight
-            break
         case .portraitUpsideDown:
             previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
-            break
         default:
             previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.portrait
-            break
         }
 
         self.captureSession.startRunning()
 
     }
 
-    public func metadataOutput(_ captureOutput: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+    public func metadataOutput(_ captureOutput: AVCaptureMetadataOutput,
+                               didOutput metadataObjects: [AVMetadataObject],
+                               from connection: AVCaptureConnection) {
 
         if !isBusy {
             isBusy = true
-            var barcodeObjects: Array<AVMetadataMachineReadableCodeObject> = []
+            var barcodeObjects = [AVMetadataMachineReadableCodeObject]()
             var corners = [[Any]]()
             for metadataObject in metadataObjects {
                 if let videoPreviewLayer = self.previewLayer {
-                    if let transformedMetadataObject = videoPreviewLayer.transformedMetadataObject(for: metadataObject ) {
+                    if let transformedMetadataObject = videoPreviewLayer
+                        .transformedMetadataObject(for: metadataObject ) {
                         if transformedMetadataObject.isKind(of: AVMetadataMachineReadableCodeObject.self) {
                             let barcodeObject = transformedMetadataObject as! AVMetadataMachineReadableCodeObject
                             barcodeObjects.append(barcodeObject)
@@ -431,8 +411,8 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
             }
             self.focusLine.corners = corners
 
-            if barcodeObjects.count > 0 {
-                self.getImage(completionHandler: { (image, error) in
+            if !barcodeObjects.isEmpty {
+                self.getImage(completionHandler: { (image, _) in
                     self.delegate?.scanBarcodeCameraManagerDidRecognizeBarcode(barcode: barcodeObjects, image: image)
                     self.isBusy = false
                     self.focusLine.corners = []

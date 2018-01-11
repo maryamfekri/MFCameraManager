@@ -49,7 +49,10 @@ class FocusMarker: CALayer {
         ctx.setLineWidth(self.strokeWidth)
 
         // Rect
-        ctx.stroke(CGRect(x: self.point.x - self.size.width / 2.0, y: self.point.y - self.size.height / 2.0, width: self.size.width, height: self.size.height))
+        ctx.stroke(CGRect(x: self.point.x - self.size.width / 2.0,
+                          y: self.point.y - self.size.height / 2.0,
+                          width: self.size.width,
+                          height: self.size.height))
 
         // Focus
         for i in 0..<4 {

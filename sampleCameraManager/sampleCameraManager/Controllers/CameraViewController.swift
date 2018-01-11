@@ -11,14 +11,14 @@ import AVFoundation
 
 class CameraViewController: UIViewController {
 
-    //===============
+    //=============
     // MARK: Outlets
-    //===============
+    //=============
     @IBOutlet weak var cameraView: UIView!
 
-    //=====================
+    //===================
     // MARK: Lazy Loadings
-    //=====================
+    //===================
     lazy var cameraManager: CameraManager = {
         let this = CameraManager()
         this.captureSetup(in: self.cameraView, withPosition: .back)

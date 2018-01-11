@@ -11,18 +11,18 @@ import AVFoundation
 
 class ScanBarcodeViewController: UIViewController {
 
-    //===============
+    //=============
     // MARK: Outlets
-    //===============
+    //=============
     @IBOutlet weak var cameraView: UIView! {
         didSet {
             cameraView.layer.mask = maskLayer
         }
     }
 
-    //=====================
+    //===================
     // MARK: Lazy Loadings
-    //=====================
+    //===================
     lazy var scanBarcodeCameraManager: ScanBarcodeCameraManager = {
         let this = ScanBarcodeCameraManager()
         this.delegate = self

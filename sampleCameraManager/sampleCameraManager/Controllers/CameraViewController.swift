@@ -118,8 +118,8 @@ extension CameraViewController {
                 return
             }
             DispatchQueue.main.async {
-               self.performSegue(withIdentifier: "CameraView2ImageView",
-                                 sender: croppedImage)
+                self.performSegue(withIdentifier: "CameraView2ImageView",
+                                  sender: croppedImage)
             }
         }
     }

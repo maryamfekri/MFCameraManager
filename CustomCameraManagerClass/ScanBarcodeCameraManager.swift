@@ -186,93 +186,95 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
         }
     }
 
-    func getImage(croppedWith rect: CGRect? = nil, completionHandler: @escaping MFCameraMangerCompletion) {
+    func getImage(croppedWith rect: CGRect? = nil,
+                  completionHandler: @escaping MFCameraMangerCompletion) {
 
         var image: UIImage?
         if let videoConnection = stillImageOutput?.connection(with: AVMediaType.video) {
             stillImageOutput?
                 .captureStillImageAsynchronously(from: videoConnection) { (imageDataSampleBuffer, error) -> Void in
-                if imageDataSampleBuffer != nil {
-                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer!)
+                    if imageDataSampleBuffer != nil {
+                        let imageData = AVCaptureStillImageOutput
+                            .jpegStillImageNSDataRepresentation(imageDataSampleBuffer!)
 
-                    // The image returned in initialImageData will be larger than what
-                    //  is shown in the AVCaptureVideoPreviewLayer, so we need to crop it.
-                    image = UIImage(data: imageData!)!
+                        // The image returned in initialImageData will be larger than what
+                        //  is shown in the AVCaptureVideoPreviewLayer, so we need to crop it.
+                        image = UIImage(data: imageData!)!
 
-                    let originalSize: CGSize
+                        let originalSize: CGSize
 
-                    if rect != nil {
-                        // Calculate the fractional size that is shown in the preview
-                        if let metaRect = self
-                            .previewLayer?
-                            .metadataOutputRectConverted(fromLayerRect: rect!) {
-                            if image!.imageOrientation == UIImageOrientation.left
-                                || image!.imageOrientation == UIImageOrientation.right {
-                                // For these images (which are portrait), swap the size of the
-                                // image, because here the output image is actually rotated
-                                // relative to what you see on screen.
-                                originalSize = CGSize(width: image!.size.height, height: image!.size.width)
-                            } else {
-                                originalSize = image!.size
-                            }
-
-                            let x = metaRect.origin.x * originalSize.width
-                            let y = metaRect.origin.y * originalSize.height
-                            // metaRect is fractional, that's why we multiply here.
-                            let cropRect: CGRect = CGRect( x: x,
-                                                            y: y,
-                                                            width: metaRect.size.width * originalSize.width,
-                                                            height: metaRect.size.height * originalSize.height).integral
-
-                            //getting the device orientation to change the final image orientation
-                            let imageOrientation: UIImageOrientation?
-                            let currentDevice: UIDevice = UIDevice.current
-                            let orientation: UIDeviceOrientation = currentDevice.orientation
-                            if self.cameraPosition == .back {
-                                switch orientation {
-                                case .portrait:
-                                    imageOrientation = .right
-                                case .portraitUpsideDown:
-                                    imageOrientation = .left
-                                case .landscapeRight:
-                                    imageOrientation = .down
-                                case .landscapeLeft:
-                                    imageOrientation = .up
-                                default:
-                                    imageOrientation = .right
+                        if rect != nil {
+                            // Calculate the fractional size that is shown in the preview
+                            if let metaRect = self
+                                .previewLayer?
+                                .metadataOutputRectConverted(fromLayerRect: rect!) {
+                                if image!.imageOrientation == UIImageOrientation.left
+                                    || image!.imageOrientation == UIImageOrientation.right {
+                                    // For these images (which are portrait), swap the size of the
+                                    // image, because here the output image is actually rotated
+                                    // relative to what you see on screen.
+                                    originalSize = CGSize(width: image!.size.height, height: image!.size.width)
+                                } else {
+                                    originalSize = image!.size
                                 }
-                            } else {
-                                switch orientation {
-                                case .portrait:
-                                    imageOrientation = .leftMirrored
-                                case .portraitUpsideDown:
-                                    imageOrientation = .rightMirrored
-                                case .landscapeRight:
-                                    imageOrientation = .upMirrored
-                                case .landscapeLeft:
-                                    imageOrientation = .downMirrored
-                                default:
-                                    imageOrientation = .leftMirrored
+
+                                let x = metaRect.origin.x * originalSize.width
+                                let y = metaRect.origin.y * originalSize.height
+                                // metaRect is fractional, that's why we multiply here.
+                                let cropRect = CGRect( x: x,
+                                                       y: y,
+                                                       width: metaRect.size.width * originalSize.width,
+                                                       height: metaRect.size.height * originalSize.height).integral
+
+                                //getting the device orientation to change the final image orientation
+                                let imageOrientation: UIImageOrientation?
+                                let currentDevice: UIDevice = UIDevice.current
+                                let orientation: UIDeviceOrientation = currentDevice.orientation
+                                if self.cameraPosition == .back {
+                                    switch orientation {
+                                    case .portrait:
+                                        imageOrientation = .right
+                                    case .portraitUpsideDown:
+                                        imageOrientation = .left
+                                    case .landscapeRight:
+                                        imageOrientation = .down
+                                    case .landscapeLeft:
+                                        imageOrientation = .up
+                                    default:
+                                        imageOrientation = .right
+                                    }
+                                } else {
+                                    switch orientation {
+                                    case .portrait:
+                                        imageOrientation = .leftMirrored
+                                    case .portraitUpsideDown:
+                                        imageOrientation = .rightMirrored
+                                    case .landscapeRight:
+                                        imageOrientation = .upMirrored
+                                    case .landscapeLeft:
+                                        imageOrientation = .downMirrored
+                                    default:
+                                        imageOrientation = .leftMirrored
+                                    }
                                 }
+
+                                image =
+                                    UIImage(cgImage: image!.cgImage!.cropping(to: cropRect)!,
+                                            scale: 1,
+                                            orientation: imageOrientation! )
+
                             }
-
-                            image =
-                                UIImage(cgImage: image!.cgImage!.cropping(to: cropRect)!,
-                                        scale: 1,
-                                        orientation: imageOrientation! )
-
+                            //save the original and cropped image in gallery
+                            //                        UIImageWriteToSavedPhotosAlbum(capturedImage, nil, nil, nil)
+                            //                        if croppedImage != nil {
+                            //                            UIImageWriteToSavedPhotosAlbum(croppedImage!, nil, nil, nil)
+                            //                        }
                         }
-                        //save the original and cropped image in gallery
-                        //                        UIImageWriteToSavedPhotosAlbum(capturedImage, nil, nil, nil)
-                        //                        if croppedImage != nil {
-                        //                            UIImageWriteToSavedPhotosAlbum(croppedImage!, nil, nil, nil)
-                        //                        }
-                    }
 
-                }
-                OperationQueue.main.addOperation {
-                    completionHandler(image, error)
-                }
+                    }
+                    OperationQueue.main.addOperation {
+                        completionHandler(image, error)
+                    }
             }
         }
 

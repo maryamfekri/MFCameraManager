@@ -10,22 +10,36 @@ import UIKit
 
 class ImageViewController: UIViewController {
 
-    @IBOutlet weak var caprturesImageView: UIImageView!
+    //=================
+    // MARK: - Variables
+    //=================
     var image: UIImage?
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    //===============
+    // MARK: Outlets
+    //===============
+    @IBOutlet weak var caprturesImageView: UIImageView!
 
-        initView()
-    }
 }
 
-// MARK: - InitView
 extension ImageViewController {
-    func initView() {
 
-        if self.image != nil {
-            self.caprturesImageView.image = self.image
-        }
+    //=================
+    // MARK: - Overrides
+    //=================
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initView()
+    }
+
+}
+
+extension ImageViewController {
+
+    //================
+    // MARK: - Methods
+    //================
+    func initView() {
+        caprturesImageView.image = image
     }
 }

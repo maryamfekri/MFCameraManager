@@ -48,7 +48,7 @@ class CameraManager {
      - Parameter withPosition: a AVCaptureDevicePosition which is camera device position which default is back
      
      */
-    func captureSetup(in cameraView: UIView, withPosition cameraPosition: AVCaptureDevicePosition? = .back) {
+    func captureSetup(in cameraView: UIView, withPosition cameraPosition: AVCaptureDevice.Position? = .back) {
         self.cameraView = cameraView
         self.captureSession = AVCaptureSession()
         switch cameraPosition! {
@@ -131,16 +131,16 @@ class CameraManager {
      
      */
     func enableTorchMode(level: Float? = 1) {
-        for testedDevice in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo){
-            if ((testedDevice as AnyObject).position == AVCaptureDevicePosition.back && self.cameraPosition == .back) {
-                let currentDevice = testedDevice as! AVCaptureDevice
-                if currentDevice.isTorchAvailable && currentDevice.isTorchModeSupported(AVCaptureTorchMode.auto) {
+        for testedDevice in AVCaptureDevice.devices(for: AVMediaType.video){
+            if ((testedDevice as AnyObject).position == AVCaptureDevice.Position.back && self.cameraPosition == .back) {
+                let currentDevice = testedDevice 
+                if currentDevice.isTorchAvailable && currentDevice.isTorchModeSupported(AVCaptureDevice.TorchMode.auto) {
                     do {
                         try currentDevice.lockForConfiguration()
                         if currentDevice.isTorchActive {
-                            currentDevice.torchMode = AVCaptureTorchMode.off
+                            currentDevice.torchMode = AVCaptureDevice.TorchMode.off
                         } else {
-                            try currentDevice.setTorchModeOnWithLevel(level!)
+                            try currentDevice.setTorchModeOn(level: level!)
                         }
                         currentDevice.unlockForConfiguration()
                     } catch {
@@ -161,11 +161,11 @@ class CameraManager {
     func getImage(croppWith rect: CGRect? = nil, completionHandler: @escaping (UIImage?, Error?) -> Void){
         
         var croppedImage : UIImage?
-        if let videoConnection = videoDataOutput?.connection(withMediaType: AVMediaTypeVideo) {
+        if let videoConnection = videoDataOutput?.connection(with: AVMediaType.video) {
             videoDataOutput?.captureStillImageAsynchronously(from: videoConnection) {
                 (imageDataSampleBuffer, error) -> Void in
                 if imageDataSampleBuffer != nil {
-                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
+                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer!)
                     
                     // The image returned in initialImageData will be larger than what
                     //  is shown in the AVCaptureVideoPreviewLayer, so we need to crop it.
@@ -175,7 +175,7 @@ class CameraManager {
                     let visibleLayerFrame = rect ?? self.cameraView?.frame ?? CGRect.zero // THE ACTUAL VISIBLE AREA IN THE LAYER FRAME
                     
                     // Calculate the fractional size that is shown in the preview
-                    if let metaRect : CGRect = (self.previewLayer?.metadataOutputRectOfInterest(for: visibleLayerFrame)) {
+                    if let metaRect : CGRect = (self.previewLayer?.metadataOutputRectConverted(fromLayerRect: visibleLayerFrame)) {
                         if (capturedImage.imageOrientation == UIImageOrientation.left || capturedImage.imageOrientation == UIImageOrientation.right) {
                             // For these images (which are portrait), swap the size of the
                             // image, because here the output image is actually rotated
@@ -252,7 +252,7 @@ class CameraManager {
      - Parameter withDevicePosition:   AVCaptureDevicePosition which is the position of camera
      
      */
-    fileprivate func captureSetup (withDevicePosition position : AVCaptureDevicePosition) {
+    fileprivate func captureSetup (withDevicePosition position : AVCaptureDevice.Position) {
         
         captureSession.stopRunning()
         captureSession = AVCaptureSession()
@@ -262,13 +262,13 @@ class CameraManager {
         var captureDevice : AVCaptureDevice!
         
         //Device
-        for testedDevice in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo){
+        for testedDevice in AVCaptureDevice.devices(for: AVMediaType.video){
             if ((testedDevice as AnyObject).position == position) {
-                captureDevice = testedDevice as! AVCaptureDevice
+                captureDevice = testedDevice 
             }
         }
         if (captureDevice == nil) {
-            captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+            captureDevice = AVCaptureDevice.default(for: AVMediaType.video)
         }
         
         //Input
@@ -287,13 +287,13 @@ class CameraManager {
         self.videoDataOutput?.outputSettings = [AVVideoCodecKey:AVVideoCodecJPEG]
         
         if (captureError == nil) {
-            if (captureSession.canAddInput(deviceInput)) {
-                captureSession.addInput(deviceInput)
+            if (captureSession.canAddInput(deviceInput!)) {
+                captureSession.addInput(deviceInput!)
             }
             
             
-            if (captureSession.canAddOutput(self.videoDataOutput)) {
-                captureSession.addOutput(self.videoDataOutput)
+            if (captureSession.canAddOutput(self.videoDataOutput!)) {
+                captureSession.addOutput(self.videoDataOutput!)
             }
         }
         
@@ -305,7 +305,7 @@ class CameraManager {
             previewLayer?.frame = cameraView!.bounds
         }
         
-        previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+        previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
         cameraView?.layer.addSublayer(previewLayer!)
         
         //to detect orientation of device and to show the AVCapture as the orientation is

@@ -15,7 +15,7 @@ iOS 8.0+
 
 Xcode 8.1+
 
-Swift 3.0+
+Swift 3.0+ (Support Swift 4) 
 
 ---------------------------------------------------------------------------
 **Demo :** 
@@ -76,7 +76,7 @@ from now on below 4 steps are similar in each class you instantiated :
 ` cameraManager.transitionCamera() `
 
 
-**features in CameraManager class**
+**Features in CameraManager class**
 ----------------------------
 
 - to capture an image showing on camera  : 
@@ -99,7 +99,7 @@ self.cameraManager.getcroppedImage(with: self.rectLayer.frame) {  (UIImage, erro
 
 ```
 
-**features in ScanBarcodeCameraManager class**
+**Features in ScanBarcodeCameraManager class**
 ----------------------------
 
 - to get the scanned barcode and capture an image : 

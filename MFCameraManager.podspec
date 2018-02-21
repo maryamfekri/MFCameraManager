@@ -30,4 +30,7 @@ s.source_files = "CustomCameraManagerClass/**/*.{swift}"
 
 # 9
 #@gmais.resources = "CameraManager/**/*.{png,jpeg,jpg,storyboard,xib}"
+
+s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
+
 end

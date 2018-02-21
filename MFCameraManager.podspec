@@ -8,7 +8,7 @@ s.summary = "MFCameraManager manage camera session"
 s.requires_arc = true
 
 # 2
-s.version = "1.1.1"
+s.version = "1.1.0"
 
 # 3
 s.license = { :type => "MIT", :file => "LICENSE" }
@@ -30,7 +30,4 @@ s.source_files = "CustomCameraManagerClass/**/*.{swift}"
 
 # 9
 #@gmais.resources = "CameraManager/**/*.{png,jpeg,jpg,storyboard,xib}"
-
-s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
-
 end

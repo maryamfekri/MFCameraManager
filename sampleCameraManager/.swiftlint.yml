@@ -1,0 +1,16 @@
+disabled_rules: # rule identifiers to exclude from running
+
+opt_in_rules: # some rules are only opt-in
+  - empty_count
+included: # paths to include during linting. `--path` is ignored if present.
+  - sampleCameraManager
+  - ../CustomCameraManagerClass
+type_body_length:
+  - 300 # warning
+  - 400 # error
+# or they can set both explicitly
+file_length:
+  warning: 500
+  error: 1200
+
+reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, junit, html, emoji)

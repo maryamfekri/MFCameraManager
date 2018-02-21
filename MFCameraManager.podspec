@@ -8,7 +8,7 @@ s.summary = "MFCameraManager manage camera session"
 s.requires_arc = true
 
 # 2
-s.version = "1.1.1"
+s.version = "v1.1.1"
 
 # 3
 s.license = { :type => "MIT", :file => "LICENSE" }

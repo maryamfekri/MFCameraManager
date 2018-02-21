@@ -14,7 +14,7 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
 
     private var cameraPosition: CameraDevice?
     private var cameraView: UIView?
-    weak private var previewLayer: AVCaptureVideoPreviewLayer?
+    weak private var previewLayer: AVCaptureVideoPreviewLayer!
 
     //Private variables that cannot be accessed by other classes in any way.
     fileprivate var metaDataOutput: AVCaptureMetadataOutput?
@@ -31,23 +31,36 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
     private var focusMarkLayer = FocusMarker()
     private var focusLine = FocusLine()
 
-    open func captureSetup(in cameraView: UIView, with cameraPosition: AVCaptureDevice.Position? = .back) {
-        self.cameraView = cameraView
-        self.captureSession = AVCaptureSession()
-        switch cameraPosition! {
-        case .back:
-            self.captureSetup(withDevicePosition: .back)
-            self.cameraPosition = .back
-        case .front:
-            self.captureSetup(withDevicePosition: .front)
-            self.cameraPosition = .front
-        default:
-            self.captureSetup(withDevicePosition: .back)
+    private var imageOrientation: UIImageOrientation {
+        let currentDevice: UIDevice = UIDevice.current
+        let orientation: UIDeviceOrientation = currentDevice.orientation
+        if self.cameraPosition == .back {
+            switch orientation {
+            case .portrait:
+                return .right
+            case .portraitUpsideDown:
+                return .left
+            case .landscapeRight:
+                return .down
+            case .landscapeLeft:
+                return .up
+            default:
+                return .right
+            }
+        } else {
+            switch orientation {
+            case .portrait:
+                return .leftMirrored
+            case .portraitUpsideDown:
+                return .rightMirrored
+            case .landscapeRight:
+                return .upMirrored
+            case .landscapeLeft:
+                return .downMirrored
+            default:
+                return .leftMirrored
+            }
         }
-
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                          action: #selector(ScanBarcodeCameraManager.onTap(_:)))
-        self.cameraView?.addGestureRecognizer(tapGestureRecognizer)
     }
 
     open func startRunning() {
@@ -186,136 +199,121 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
         }
     }
 
-    func getImage(croppedWith rect: CGRect? = nil,
-                  completionHandler: @escaping MFCameraMangerCompletion) {
-
-        var image: UIImage?
-        if let videoConnection = stillImageOutput?.connection(with: AVMediaType.video) {
-            stillImageOutput?
-                .captureStillImageAsynchronously(from: videoConnection) { (imageDataSampleBuffer, error) -> Void in
-                    if imageDataSampleBuffer != nil {
-                        let imageData = AVCaptureStillImageOutput
-                            .jpegStillImageNSDataRepresentation(imageDataSampleBuffer!)
-
-                        // The image returned in initialImageData will be larger than what
-                        //  is shown in the AVCaptureVideoPreviewLayer, so we need to crop it.
-                        image = UIImage(data: imageData!)!
-
-                        let originalSize: CGSize
-
-                        if rect != nil {
-                            // Calculate the fractional size that is shown in the preview
-                            if let metaRect = self
-                                .previewLayer?
-                                .metadataOutputRectConverted(fromLayerRect: rect!) {
-                                if image!.imageOrientation == UIImageOrientation.left
-                                    || image!.imageOrientation == UIImageOrientation.right {
-                                    // For these images (which are portrait), swap the size of the
-                                    // image, because here the output image is actually rotated
-                                    // relative to what you see on screen.
-                                    originalSize = CGSize(width: image!.size.height, height: image!.size.width)
-                                } else {
-                                    originalSize = image!.size
-                                }
-
-                                let x = metaRect.origin.x * originalSize.width
-                                let y = metaRect.origin.y * originalSize.height
-                                // metaRect is fractional, that's why we multiply here.
-                                let cropRect = CGRect( x: x,
-                                                       y: y,
-                                                       width: metaRect.size.width * originalSize.width,
-                                                       height: metaRect.size.height * originalSize.height).integral
-
-                                //getting the device orientation to change the final image orientation
-                                let imageOrientation: UIImageOrientation?
-                                let currentDevice: UIDevice = UIDevice.current
-                                let orientation: UIDeviceOrientation = currentDevice.orientation
-                                if self.cameraPosition == .back {
-                                    switch orientation {
-                                    case .portrait:
-                                        imageOrientation = .right
-                                    case .portraitUpsideDown:
-                                        imageOrientation = .left
-                                    case .landscapeRight:
-                                        imageOrientation = .down
-                                    case .landscapeLeft:
-                                        imageOrientation = .up
-                                    default:
-                                        imageOrientation = .right
-                                    }
-                                } else {
-                                    switch orientation {
-                                    case .portrait:
-                                        imageOrientation = .leftMirrored
-                                    case .portraitUpsideDown:
-                                        imageOrientation = .rightMirrored
-                                    case .landscapeRight:
-                                        imageOrientation = .upMirrored
-                                    case .landscapeLeft:
-                                        imageOrientation = .downMirrored
-                                    default:
-                                        imageOrientation = .leftMirrored
-                                    }
-                                }
-
-                                image =
-                                    UIImage(cgImage: image!.cgImage!.cropping(to: cropRect)!,
-                                            scale: 1,
-                                            orientation: imageOrientation! )
-
-                            }
-                            //save the original and cropped image in gallery
-                            //                        UIImageWriteToSavedPhotosAlbum(capturedImage, nil, nil, nil)
-                            //                        if croppedImage != nil {
-                            //                            UIImageWriteToSavedPhotosAlbum(croppedImage!, nil, nil, nil)
-                            //                        }
-                        }
-
-                    }
-                    OperationQueue.main.addOperation {
-                        completionHandler(image, error)
-                    }
-            }
+    open func getImage(croppWith rect: CGRect? = nil,
+                       completion: @escaping MFCameraMangerCompletion) {
+        guard let videoConnection = stillImageOutput?.connection(with: .video) else {
+            completion(nil, MFCameraError.noVideoConnection)
+            return
         }
 
+        stillImageOutput?
+            .captureStillImageAsynchronously(from: videoConnection) { (imageDataSampleBuffer, error) -> Void in
+                guard let imageDataSampleBuffer = imageDataSampleBuffer,
+                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer),
+                    let capturedImage: UIImage = UIImage(data: imageData) else {
+                        completion(nil, MFCameraError.noImageCapture)
+                        return
+                }
+                // The image returned in initialImageData will be larger than what
+                //  is shown in the AVCaptureVideoPreviewLayer, so we need to crop it.
+                do {
+                    let croppedImage = try self.crop(image: capturedImage,
+                                                     withRect: rect ?? self.cameraView?.frame ?? .zero)
+                    completion(croppedImage, error)
+                } catch {
+                    completion(nil, error)
+                }
+        }
+    }
+
+    private func crop(image: UIImage, withRect rect: CGRect) throws -> UIImage {
+        let originalSize: CGSize
+        // Calculate the fractional size that is shown in the preview
+        guard let metaRect = previewLayer?.metadataOutputRectConverted(fromLayerRect: rect) else {
+            throw MFCameraError.noMetaRect
+        }
+        if image.imageOrientation == UIImageOrientation.left
+            || image.imageOrientation == UIImageOrientation.right {
+            // For these images (which are portrait), swap the size of the
+            // image, because here the output image is actually rotated
+            // relative to what you see on screen.
+            originalSize = CGSize(width: image.size.height,
+                                  height: image.size.width)
+        } else {
+            originalSize = image.size
+        }
+
+        let x = metaRect.origin.x * originalSize.width
+        let y = metaRect.origin.y * originalSize.height
+        // metaRect is fractional, that's why we multiply here.
+        let cropRect: CGRect = CGRect( x: x,
+                                       y: y,
+                                       width: metaRect.size.width * originalSize.width,
+                                       height: metaRect.size.height * originalSize.height).integral
+        guard let cropedCGImage = image.cgImage?.cropping(to: cropRect) else {
+            throw MFCameraError.crop
+        }
+
+        return  UIImage(cgImage: cropedCGImage,
+                        scale: 1,
+                        orientation: imageOrientation)
+    }
+
+    open func captureSetup(in cameraView: UIView, with cameraPosition: AVCaptureDevice.Position? = .back) throws {
+        self.cameraView = cameraView
+        self.captureSession = AVCaptureSession()
+        switch cameraPosition! {
+        case .back:
+            try captureSetup(withDevicePosition: .back)
+            self.cameraPosition = .back
+        case .front:
+            try captureSetup(withDevicePosition: .front)
+            self.cameraPosition = .front
+        default:
+            try captureSetup(withDevicePosition: .back)
+        }
+
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                          action: #selector(ScanBarcodeCameraManager.onTap(_:)))
+        self.cameraView?.addGestureRecognizer(tapGestureRecognizer)
+    }
+
+    private func getDevice(withPosition position: AVCaptureDevice.Position) throws -> AVCaptureDevice {
+        if #available(iOS 10.0, *) {
+            guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position) else {
+                throw MFCameraError.noDevice
+            }
+            return device
+        } else {
+            guard let device = AVCaptureDevice
+                .devices(for: .video)
+                .first(where: {device in
+                    device.position == position
+                }) else {
+                    throw MFCameraError.noDevice
+            }
+            return device
+        }
     }
 
     /**
      this func will setup the camera and capture session and add to cameraView
      */
-    fileprivate func captureSetup (withDevicePosition position: AVCaptureDevice.Position) {
+    fileprivate func captureSetup(withDevicePosition position: AVCaptureDevice.Position) throws {
 
         captureSession.stopRunning()
         captureSession = AVCaptureSession()
         previewLayer?.removeFromSuperlayer()
 
-        var captureError: NSError?
-
-        //Device
-        for testedDevice in AVCaptureDevice.devices(for: AVMediaType.video)
-            where (testedDevice as AnyObject).position == position {
-                captureDevice = testedDevice
-        }
-        if captureDevice == nil {
-            captureDevice = AVCaptureDevice.default(for: AVMediaType.video)
-        }
-
+        // device
+        let captureDevice: AVCaptureDevice = try getDevice(withPosition: position)
         //Input
-        var deviceInput: AVCaptureDeviceInput?
-        do {
-            deviceInput = try AVCaptureDeviceInput(device: captureDevice)
-        } catch let error as NSError {
-            captureError = error
-            deviceInput = nil
-            print("you dont have camera")
-            return
-        }
+        let deviceInput = try AVCaptureDeviceInput(device: captureDevice)
 
         //Output
         metaDataOutput = AVCaptureMetadataOutput()
 
         // Remove previous added inputs from session
-
         if self.metaDataOutput?.metadataObjectsDelegate == nil
             || self.metaDataOutput?.metadataObjectsCallbackQueue == nil {
             let queue = DispatchQueue(label: "com.pdq.rsbarcodes.metadata",
@@ -334,9 +332,8 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
         self.stillImageOutput = AVCaptureStillImageOutput()
         self.stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
 
-        if captureError == nil {
-            if captureSession.canAddInput(deviceInput!) {
-                captureSession.addInput(deviceInput!)
+            if captureSession.canAddInput(deviceInput) {
+                captureSession.addInput(deviceInput)
             }
 
             if self.captureSession.canAddOutput(self.metaDataOutput!) {
@@ -351,42 +348,26 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
             if captureSession.canAddOutput(self.stillImageOutput!) {
                 captureSession.addOutput(self.stillImageOutput!)
             }
-        }
 
         //To get the highest quality of bufferData add below code
         //        captureSession.sessionPreset = AVCaptureSessionPresetPhoto
 
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        if cameraView != nil {
-            previewLayer?.frame = cameraView!.bounds
+        if let cameraView = cameraView {
+            previewLayer?.frame = cameraView.bounds
         }
 
         previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        cameraView?.layer.addSublayer(previewLayer!)
+        cameraView?.layer.addSublayer(previewLayer)
 
-        self.focusMarkLayer.frame = self.cameraView!.bounds
+        focusMarkLayer.frame = self.cameraView?.bounds ?? .zero
         cameraView?.layer.insertSublayer(self.focusMarkLayer, above: self.previewLayer)
 
-        self.focusLine.frame = self.cameraView!.bounds
+        self.focusLine.frame = self.cameraView?.bounds ?? .zero
         self.cameraView?.layer.insertSublayer(self.focusLine, above: self.previewLayer)
 
         //to detect orientation of device and to show the AVCapture as the orientation is
-        let currentDevice: UIDevice = UIDevice.current
-        let orientation: UIDeviceOrientation = currentDevice.orientation
-        let previewLayerConnection =  self.previewLayer?.connection
-        switch orientation {
-        case .portrait:
-            previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.portrait
-        case .landscapeRight:
-            previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
-        case .landscapeLeft:
-            previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.landscapeRight
-        case .portraitUpsideDown:
-            previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
-        default:
-            previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.portrait
-        }
-
+        previewLayer.connection?.videoOrientation = UIDevice.current.orientation.avCaptureVideoOrientation
         self.captureSession.startRunning()
 
     }
@@ -413,11 +394,11 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
             self.focusLine.corners = corners
 
             if !barcodeObjects.isEmpty {
-                self.getImage(completionHandler: { (image, _) in
+                self.getImage { (image, _) in
                     self.delegate?.scanBarcodeCameraManagerDidRecognizeBarcode(barcode: barcodeObjects, image: image)
                     self.isBusy = false
                     self.focusLine.corners = []
-                })
+                }
             }
         }
     }

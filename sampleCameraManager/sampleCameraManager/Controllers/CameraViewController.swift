@@ -14,14 +14,17 @@ class CameraViewController: UIViewController {
     //=============
     // MARK: Outlets
     //=============
-    @IBOutlet weak var cameraView: UIView!
+    @IBOutlet weak var cameraView: UIView! {
+        didSet {
+            cameraView.layer.mask = maskLayer
+        }
+    }
 
     //===================
     // MARK: Lazy Loadings
     //===================
     lazy var cameraManager: CameraManager = {
         let this = CameraManager()
-        this.captureSetup(in: self.cameraView, withPosition: .back)
         return this
     }()
 
@@ -66,6 +69,15 @@ extension CameraViewController {
     //=================
     override func viewDidLoad() {
         super.viewDidLoad()
+        do {
+            try cameraManager.captureSetup(in: cameraView, withPosition: .back)
+        } catch {
+            let alertController = UIAlertController(title: "Error",
+                                                    message: error.localizedDescription,
+                                                    preferredStyle: .alert)
+            alertController.addAction(.init(title: "ok", style: .default, handler: nil))
+            present(alertController, animated: true, completion: nil)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -127,8 +139,6 @@ extension CameraViewController {
     /// this func will draw a rect mask over the camera view
     func drawOverRectView() {
 
-        cameraView.layer.mask = nil
-
         let cameraSize = self.cameraView.frame.size
         // to calculate the height of frame based on screen size
         let frameHeight: CGFloat
@@ -179,9 +189,6 @@ extension CameraViewController {
     //=================
     // MARK: - Selectors
     //=================
-    @IBAction func useFlashButtonTouchedUpInside(_ sender: UIButton) {
-        captureAndCropp()
-    }
 
     @IBAction func tapGestureAction(_ sender: Any) {
         captureAndCropp()

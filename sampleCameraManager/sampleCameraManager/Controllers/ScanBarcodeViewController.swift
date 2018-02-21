@@ -20,13 +20,15 @@ class ScanBarcodeViewController: UIViewController {
         }
     }
 
+    @IBOutlet weak var barcodeLabel: UILabel!
+    @IBOutlet weak var capturedImageView: UIImageView!
+
     //===================
     // MARK: Lazy Loadings
     //===================
     lazy var scanBarcodeCameraManager: ScanBarcodeCameraManager = {
         let this = ScanBarcodeCameraManager()
         this.delegate = self
-        this.captureSetup(in: self.cameraView, with: .back)
         return this
     }()
 
@@ -70,6 +72,16 @@ extension ScanBarcodeViewController {
     //=================
     override func viewDidLoad() {
         super.viewDidLoad()
+        do {
+            try scanBarcodeCameraManager.captureSetup(in: self.cameraView, with: .back)
+        } catch {
+            let alertController = UIAlertController(title: "Error",
+                                                    message: error.localizedDescription,
+                                                    preferredStyle: .alert)
+            alertController.addAction(.init(title: "ok", style: .default, handler: nil))
+            present(alertController, animated: true, completion: nil)
+        }
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -118,8 +130,6 @@ extension ScanBarcodeViewController {
     //================
     /// this func will draw a rect mask over the camera view
     func drawOverRectView() {
-
-        cameraView.layer.mask = nil
 
         let cameraSize = self.cameraView.frame.size
         // to calculate the height of frame based on screen size
@@ -172,10 +182,9 @@ extension ScanBarcodeViewController: ScanBarcodeCameraManagerDelegate {
     // MARK: - ScanBarcodeCameraManagerDelegate
     //==========================================
     func scanBarcodeCameraManagerDidRecognizeBarcode(barcode: [AVMetadataMachineReadableCodeObject], image: UIImage?) {
-        scanBarcodeCameraManager.stopRunning()
-        print(barcode)
-        //        self.performSegue(withIdentifier: "CameraView2ImageView", sender: image)
-        scanBarcodeCameraManager.startRunning()
-
+        DispatchQueue.main.async { [weak self] in
+            self?.barcodeLabel.text = barcode.first?.stringValue ?? ""
+            self?.capturedImageView.image = image
+        }
     }
 }

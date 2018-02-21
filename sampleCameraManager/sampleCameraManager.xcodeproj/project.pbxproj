@@ -14,6 +14,8 @@
 		84186C3F2006EEEE000888CD /* FocusMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84186C3B2006EEED000888CD /* FocusMarker.swift */; };
 		84A4B5FC2006F86100A7E372 /* CameraDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A4B5FB2006F86000A7E372 /* CameraDevice.swift */; };
 		84A4B5FE2006F90C00A7E372 /* ScanBarcodeCameraManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A4B5FD2006F90C00A7E372 /* ScanBarcodeCameraManagerDelegate.swift */; };
+		84BED9AB203D7F3A00222007 /* UIDeviceOrientationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BED9A9203D7F3A00222007 /* UIDeviceOrientationExtension.swift */; };
+		84BED9AC203D7F3A00222007 /* MFCameraError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BED9AA203D7F3A00222007 /* MFCameraError.swift */; };
 		A54E72301E47389500B6E655 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54E722F1E47389500B6E655 /* AppDelegate.swift */; };
 		A54E72351E47389500B6E655 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A54E72331E47389500B6E655 /* Main.storyboard */; };
 		A54E72371E47389500B6E655 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A54E72361E47389500B6E655 /* Assets.xcassets */; };
@@ -30,6 +32,8 @@
 		84186C3B2006EEED000888CD /* FocusMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FocusMarker.swift; path = ../../CustomCameraManagerClass/FocusMarker.swift; sourceTree = "<group>"; };
 		84A4B5FB2006F86000A7E372 /* CameraDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CameraDevice.swift; path = ../../CustomCameraManagerClass/CameraDevice.swift; sourceTree = "<group>"; };
 		84A4B5FD2006F90C00A7E372 /* ScanBarcodeCameraManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ScanBarcodeCameraManagerDelegate.swift; path = ../../CustomCameraManagerClass/ScanBarcodeCameraManagerDelegate.swift; sourceTree = "<group>"; };
+		84BED9A9203D7F3A00222007 /* UIDeviceOrientationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIDeviceOrientationExtension.swift; path = ../../CustomCameraManagerClass/UIDeviceOrientationExtension.swift; sourceTree = "<group>"; };
+		84BED9AA203D7F3A00222007 /* MFCameraError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MFCameraError.swift; path = ../../CustomCameraManagerClass/MFCameraError.swift; sourceTree = "<group>"; };
 		A54E722C1E47389500B6E655 /* sampleCameraManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sampleCameraManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A54E722F1E47389500B6E655 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A54E72341E47389500B6E655 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -65,11 +69,13 @@
 			isa = PBXGroup;
 			children = (
 				84186C392006EEED000888CD /* CameraManager.swift */,
+				84BED9A9203D7F3A00222007 /* UIDeviceOrientationExtension.swift */,
 				84186C382006EEED000888CD /* ScanBarcodeCameraManager.swift */,
 				84186C3A2006EEED000888CD /* FocusLine.swift */,
 				84186C3B2006EEED000888CD /* FocusMarker.swift */,
 				84A4B5FB2006F86000A7E372 /* CameraDevice.swift */,
 				84A4B5FD2006F90C00A7E372 /* ScanBarcodeCameraManagerDelegate.swift */,
+				84BED9AA203D7F3A00222007 /* MFCameraError.swift */,
 			);
 			name = CustomClasses;
 			sourceTree = "<group>";
@@ -137,7 +143,7 @@
 				TargetAttributes = {
 					A54E722B1E47389500B6E655 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = DF298Y52D4;
+						DevelopmentTeam = 2W4U2P3K99;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
@@ -200,6 +206,8 @@
 				84A4B5FE2006F90C00A7E372 /* ScanBarcodeCameraManagerDelegate.swift in Sources */,
 				84186C3C2006EEEE000888CD /* ScanBarcodeCameraManager.swift in Sources */,
 				A54E72301E47389500B6E655 /* AppDelegate.swift in Sources */,
+				84BED9AC203D7F3A00222007 /* MFCameraError.swift in Sources */,
+				84BED9AB203D7F3A00222007 /* UIDeviceOrientationExtension.swift in Sources */,
 				A54E72441E473A7B00B6E655 /* ImageViewController.swift in Sources */,
 				84186C3D2006EEEE000888CD /* CameraManager.swift in Sources */,
 				84186C3E2006EEEE000888CD /* FocusLine.swift in Sources */,
@@ -340,7 +348,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = DF298Y52D4;
+				DEVELOPMENT_TEAM = 2W4U2P3K99;
 				INFOPLIST_FILE = sampleCameraManager/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -355,7 +363,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = DF298Y52D4;
+				DEVELOPMENT_TEAM = 2W4U2P3K99;
 				INFOPLIST_FILE = sampleCameraManager/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

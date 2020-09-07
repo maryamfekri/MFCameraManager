@@ -31,7 +31,7 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
     private var focusMarkLayer = FocusMarker()
     private var focusLine = FocusLine()
 
-    private var imageOrientation: UIImageOrientation {
+    private var imageOrientation: UIImage.Orientation {
         let currentDevice: UIDevice = UIDevice.current
         let orientation: UIDeviceOrientation = currentDevice.orientation
         if self.cameraPosition == .back {
@@ -232,8 +232,8 @@ open class ScanBarcodeCameraManager: NSObject, AVCaptureMetadataOutputObjectsDel
         guard let metaRect = previewLayer?.metadataOutputRectConverted(fromLayerRect: rect) else {
             throw MFCameraError.noMetaRect
         }
-        if image.imageOrientation == UIImageOrientation.left
-            || image.imageOrientation == UIImageOrientation.right {
+        if image.imageOrientation == UIImage.Orientation.left
+            || image.imageOrientation == UIImage.Orientation.right {
             // For these images (which are portrait), swap the size of the
             // image, because here the output image is actually rotated
             // relative to what you see on screen.
